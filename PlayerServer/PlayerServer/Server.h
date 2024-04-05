@@ -8,8 +8,10 @@
 class CBusiness
 {
 public:
+	CBusiness() :m_connectedcallback(NULL), m_recvcallback(NULL)
+	{}
 	/*要不停的接收来自主进程的fd，要起线程池*/
-	virtual int BusinessProcess() = 0;
+	virtual int BusinessProcess(CProcess* proc) = 0;
 
 	template<typename _FUNCTION_, typename..._ARGS_>
 	int setConnectedCallback(_FUNCTION_ func, _ARGS_...args) {
@@ -23,7 +25,7 @@ public:
 		if (m_recvcallback == NULL)return -1;
 		return 0;
 	}
-private:
+protected:
 	CFunctionBase* m_connectedcallback;
 	CFunctionBase* m_recvcallback;
 };

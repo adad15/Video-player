@@ -11,7 +11,7 @@ int CServer::Init(CBusiness* business, const Buffer& ip, short port)
 	int ret = 0;
 	if (business == NULL) return -1;
 	m_business = business;
-	ret = m_process.SetEntryFunction(&CBusiness::BusinessProcess, m_business);
+	ret = m_process.SetEntryFunction(&CBusiness::BusinessProcess, m_business, &m_process);
 	if (ret != 0)return -2;
 	ret = m_process.CreatSubProcess();/*运行BusinessProcess进程入口函数*/
 	if (ret != 0)return -3;

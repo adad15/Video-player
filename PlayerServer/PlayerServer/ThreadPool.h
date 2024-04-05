@@ -116,6 +116,7 @@ private:
 				}
 			}
 		}
+		return 0;
 	}
 private:
 	CEpoll m_epoll;

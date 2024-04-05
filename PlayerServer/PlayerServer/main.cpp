@@ -2,8 +2,7 @@
 
 #include <stdlib.h>
 #include <errno.h>
-#include "Process.h"
-#include "Logger.h"
+#include "MyPlayerServer.h"
 
 
 /*入口函数*/
@@ -54,12 +53,11 @@ int LogTest()
     return 0;
 }
 
-int main()
-{
-    //CProcess::SwitchDeamon();
+int oldtest() {
+	//CProcess::SwitchDeamon();
 	CProcess proclog, procclients;
-	printf("%s(%d):<%s> pid=%d\n", __FILE__,__LINE__, __FUNCTION__, getpid());
-	proclog.SetEntryFunction(CreatLogServer,&proclog);
+	printf("%s(%d):<%s> pid=%d\n", __FILE__, __LINE__, __FUNCTION__, getpid());
+	proclog.SetEntryFunction(CreatLogServer, &proclog);
 	int ret = proclog.CreatSubProcess();
 	if (ret != 0) {
 		printf("%s(%d):<%s> pid=%d\n", __FILE__,
@@ -67,28 +65,47 @@ int main()
 		return -1;
 	}
 	LogTest();
-	printf("%s(%d):<%s> pid=%d\n", __FILE__,__LINE__, __FUNCTION__, getpid());
+	printf("%s(%d):<%s> pid=%d\n", __FILE__, __LINE__, __FUNCTION__, getpid());
 	CThread thread(LogTest);
 	thread.Start();
-	procclients.SetEntryFunction(CreatClientServer,&procclients);
+	procclients.SetEntryFunction(CreatClientServer, &procclients);
 	ret = procclients.CreatSubProcess();
 	if (ret != 0) {
-		printf("%s(%d):<%s> pid=%d\n", __FILE__,__LINE__, __FUNCTION__, getpid());
+		printf("%s(%d):<%s> pid=%d\n", __FILE__, __LINE__, __FUNCTION__, getpid());
 		return -2;
 	}
-	printf("%s(%d):<%s> pid=%d\n", __FILE__,__LINE__, __FUNCTION__, getpid());
+	printf("%s(%d):<%s> pid=%d\n", __FILE__, __LINE__, __FUNCTION__, getpid());
 
 	usleep(100 * 000);
 	int fd = open("./test.txt", O_RDWR | O_CREAT | O_APPEND);
-	printf("%s(%d):<%s> fd=%d\n", __FILE__,__LINE__, __FUNCTION__, fd);
+	printf("%s(%d):<%s> fd=%d\n", __FILE__, __LINE__, __FUNCTION__, fd);
 	if (fd == -1)return -3;
 	ret = procclients.SendFD(fd);
-	printf("%s(%d):<%s> ret=%d\n", __FILE__,__LINE__, __FUNCTION__, ret);
-	if (ret != 0)printf("errno:%d msg:%s\n",errno, strerror(errno));
+	printf("%s(%d):<%s> ret=%d\n", __FILE__, __LINE__, __FUNCTION__, ret);
+	if (ret != 0)printf("errno:%d msg:%s\n", errno, strerror(errno));
 	write(fd, "edoyun", 6);
 	close(fd);
 	proclog.SendFD(-1);
-	
+
 	(void)getchar();
+	return 0;
+}
+
+int main()
+{
+	int ret{};
+	CProcess proclog;
+	ret = proclog.SetEntryFunction(CreatLogServer, &proclog);
+	ERR_RETURN(ret, -1);
+	ret = proclog.CreatSubProcess();
+	ERR_RETURN(ret, -2);
+	CMyPlayerServer business(2);
+	CServer server;
+	ret = server.Init(&business);
+	ERR_RETURN(ret, -3);
+	ret = server.Run();
+	ERR_RETURN(ret, -4);
+	
+
 	return 0;
 }
