@@ -4,7 +4,6 @@
 #include <errno.h>
 #include "Process.h"
 #include "Logger.h"
-#include "ThreadPool.h"
 
 
 /*入口函数*/
@@ -57,7 +56,6 @@ int LogTest()
 
 int main()
 {
-
     //CProcess::SwitchDeamon();
 	CProcess proclog, procclients;
 	printf("%s(%d):<%s> pid=%d\n", __FILE__,__LINE__, __FUNCTION__, getpid());
@@ -89,24 +87,6 @@ int main()
 	if (ret != 0)printf("errno:%d msg:%s\n",errno, strerror(errno));
 	write(fd, "edoyun", 6);
 	close(fd);
-	CThreadPool pool;
-	ret = pool.Start(4);
-	printf("%s(%d):<%s> ret=%d errno:%d msg:%s\n",
-		__FILE__, __LINE__, __FUNCTION__, ret, errno, strerror(errno));
-	ret = pool.AddTask(LogTest);
-	printf("%s(%d):<%s> ret=%d errno:%d msg:%s\n",
-		__FILE__, __LINE__, __FUNCTION__, ret, errno, strerror(errno));
-	ret = pool.AddTask(LogTest);
-	printf("%s(%d):<%s> ret=%d errno:%d msg:%s\n",
-		__FILE__, __LINE__, __FUNCTION__, ret, errno, strerror(errno));
-	ret = pool.AddTask(LogTest);
-	printf("%s(%d):<%s> ret=%d errno:%d msg:%s\n",
-		__FILE__, __LINE__, __FUNCTION__, ret, errno, strerror(errno));
-	ret = pool.AddTask(LogTest);
-	printf("%s(%d):<%s> ret=%d errno:%d msg:%s\n",
-		__FILE__, __LINE__, __FUNCTION__, ret, errno, strerror(errno));
-	(void)getchar();
-	pool.Close();
 	proclog.SendFD(-1);
 	
 	(void)getchar();
