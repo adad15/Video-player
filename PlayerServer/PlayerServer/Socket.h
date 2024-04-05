@@ -105,7 +105,8 @@ public:
 	virtual int Close() {
 		m_status = 3;
 		if (m_socket != -1) {
-			unlink(m_param.ip);
+			if (m_param.attr & SOCK_ISSERVER)/*所以要加上这个逻辑*/
+				unlink(m_param.ip);/*这里不对客户端析构的时候，会把进程通信的连接释放，应该是服务端析构的时候才释放连接。*/
 			int fd = m_socket;
 			m_socket = -1;
 			close(fd);

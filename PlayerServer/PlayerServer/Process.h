@@ -107,8 +107,8 @@ public:
 		msg.msg_controllen = cmsg->cmsg_len;
 
 		ssize_t ret = recvmsg(pipes[0], &msg, 0);
-		printf("%s(%d):<%s> pid=%d errno:%d msg:%s\n",
-			__FILE__, __LINE__, __FUNCTION__, getpid(), errno, strerror(errno));
+ 		printf("%s(%d):<%s> pid=%d errno:%d msg:%s\n",
+ 			__FILE__, __LINE__, __FUNCTION__, getpid(), errno, strerror(errno));
 		if (ret == -1) {
 			delete cmsg;
 			return -2;

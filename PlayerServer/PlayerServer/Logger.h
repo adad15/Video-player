@@ -127,6 +127,7 @@ public:
 			printf("%s(%d):[%s] ret=%d client=%d\n", __FILE__, __LINE__, __FUNCTION__, ret, (int)client);
 			ret = client.Link();/*connect*/
 			printf("%s(%d):[%s] ret=%d client=%d\n", __FILE__, __LINE__, __FUNCTION__, ret, (int)client);
+			if (ret != 0)printf("%s(%d):<%s> ret=%d errno:%d msg:%s\n",__FILE__, __LINE__, __FUNCTION__, ret, errno, strerror(errno));
 		}
 		ret = client.Send(info);
 		printf("%s(%d):[%s] ret=%d client=%d\n", __FILE__, __LINE__, __FUNCTION__, ret, (int)client);
@@ -198,8 +199,8 @@ private:
 								int r = pClient->Recv(data);
 								printf("%s(%d):[%s] r=%d\n", __FILE__, __LINE__, __FUNCTION__, r);
 								if (r <= 0) {
-									delete pClient;
 									mapClients[*pClient] = NULL;
+									delete pClient;
 								}
 								else {
 									printf("%s(%d):[%s] data=%s\n", __FILE__, __LINE__, __FUNCTION__, (char*)data);

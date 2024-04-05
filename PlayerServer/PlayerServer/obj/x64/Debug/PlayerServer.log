@@ -7,9 +7,6 @@
   Epoll.cpp
   Logger.cpp
   main.cpp
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\ThreadPool.h(94,53): warning : comparison of integer expressions of different signedness: ‘ssize_t’ {aka ‘long int’} and ‘size_t’ {aka ‘long unsigned int’} [-Wsign-compare]
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\ThreadPool.h(94,53): warning :    94 |                                 for (ssize_t i{}; i < esize; i++) {
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\ThreadPool.h(94,53): warning :       |                                                   ~~^~~~~~~
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(35,9): warning : unused variable ‘ret’ [-Wunused-variable]
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(35,9): warning :    35 |     int ret = proc->RecvFD(fd);
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(35,9): warning :       |         ^~~

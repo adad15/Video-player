@@ -89,7 +89,7 @@ private:
 		while (m_epoll != -1) {
 			EPEvents events;
 			int ret{};
-			size_t esize = m_epoll.WaitEvent(events);
+			ssize_t esize = m_epoll.WaitEvent(events);
 			if (esize > 0) {
 				for (ssize_t i{}; i < esize; i++) {
 					if (events[i].events & EPOLLIN) {
