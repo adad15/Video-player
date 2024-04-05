@@ -35,15 +35,16 @@ public:
 		if (m_server == NULL)return -3;
 		ret = m_server->Init(CSockParam(m_path, SOCK_ISSERVER));
 		if (ret != 0)return -4;
-		ret = m_epoll.Create(count);
+		ret = m_epoll.Create(count);/*还是只有一个epoll，可以理解为一个epoll开了4个接口*/
 		if (ret != 0)return -5;
 		ret = m_epoll.Add(*m_server, EpollDate((void*)m_server));
 		if (ret != 0) return - 6;
 		m_threads.resize(count);
 		for (unsigned i{}; i < count; i++) {
-			m_threads[i] = new CThread(&CThreadPool::TaskDispatch, this);/*通过CFunction类实现的自动this填入函数TaskDispatch中，用运行该函数*/
+			/*通过CFunction类实现的自动this填入函数TaskDispatch中,即填入到m_binder中，等待调用*/
+			m_threads[i] = new CThread(&CThreadPool::TaskDispatch, this);
 			if (m_threads[i] == NULL)return -7;
-			ret = m_threads[i]->Start();
+			ret = m_threads[i]->Start();/*在这里调用TaskDispatch函数*/
 			if (ret != 0) return -8;
 		}
 		return 0;
@@ -109,12 +110,23 @@ private:
 								CFunctionBase* base = NULL;
 								Buffer data(sizeof(base));
 								ret = pClient->Recv(data);
+								if (ret <= 0) {
+									m_epoll.Del(*pClient);
+									delete pClient;
+									continue;
+								}
+								memcpy(&base, (char*)data, sizeof(base));
+								if (base != NULL) {
+									(*base)();/*通过m_bind调用任务函数*/
+									delete base;
+								}
 							}
 						}
 					}
 				}
 			}
 		}
+		return 0;
 	}
 private:
 	CEpoll m_epoll;
