@@ -78,10 +78,12 @@
     <ClCompile Include="Epoll.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Server.cpp" />
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="Server.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="Epoll.h" />
     <ClInclude Include="Function.h" />

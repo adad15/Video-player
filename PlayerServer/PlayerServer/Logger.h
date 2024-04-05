@@ -76,7 +76,7 @@ public:
 		int ret = m_epoll.Create(1);/*创建epoll*/
 		if (ret != 0) return -3;
 		/*创建并初始化套接字+bind+listen*/
-		m_server = new CLocalSocket();
+		m_server = new CSocket();
 		if (m_server == NULL) {
 			Close();
 			return -4;
@@ -114,7 +114,7 @@ public:
 	/*给其他非日志进程的进程和线程使用*/
 	static void Trace(const LogInfo& info) {
 		/*每一个线程调用这个函数，客户端都会调用一次构造函数  也就是每个线程对应一个客户端*/
-		static thread_local CLocalSocket client;
+		static thread_local CSocket client;
 		int ret = 0;
 		if (client == -1) {
 			ret = client.Init(CSockParam("./log/server.sock", 0));
@@ -199,7 +199,7 @@ private:
 								int r = pClient->Recv(data);
 								printf("%s(%d):[%s] r=%d\n", __FILE__, __LINE__, __FUNCTION__, r);
 								if (r <= 0) {
-									mapClients[*pClient] = NULL;
+									mapClients[*pClient] = NULL;/*这里不能放在下面，因为*pClient会对空指针解引用*/
 									delete pClient;
 								}
 								else {

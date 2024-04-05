@@ -22,6 +22,7 @@ enum SockAttr {
 	SOCK_ISSERVER = 1,/*是否为服务器  1表示是  0表示客户端*/
 	SOCK_ISNONBLOCK = 2,/*是否阻塞  1表示非阻塞  0表示阻塞*/
 	SOCK_ISUDP = 4,/*是否为udp  1表示udp  0表示tcp*/
+	SOCK_ISIP = 8,/*是否为ip协议  1表示ip协议  0表示本地套接字*/
 };
 /*套接字参数类*/
 class CSockParam {
@@ -105,7 +106,8 @@ public:
 	virtual int Close() {
 		m_status = 3;
 		if (m_socket != -1) {
-			if (m_param.attr & SOCK_ISSERVER)/*所以要加上这个逻辑*/
+			if ((m_param.attr & SOCK_ISSERVER) &&/*服务器*/
+				((m_param.attr & SOCK_ISIP) == 0)/*非IP*/)/*所以要加上这个逻辑*/
 				unlink(m_param.ip);/*这里不对客户端析构的时候，会把进程通信的连接释放，应该是服务端析构的时候才释放连接。*/
 			int fd = m_socket;
 			m_socket = -1;
@@ -124,15 +126,15 @@ protected:/*设置为保护这样外部不能使用，但是子类可以使用*/
 	CSockParam m_param;
 };
 
-/*本地套接字*/
-class CLocalSocket :public CSocketBase
+/*本地套接字   在本地套接字的基础上进行修改增加网络套接字的功能*/ 
+class CSocket :public CSocketBase
 {
 public:
-	CLocalSocket():CSocketBase() {}
-	CLocalSocket(int sock) :CSocketBase() {
+	CSocket():CSocketBase() {}
+	CSocket(int sock) :CSocketBase() {
 		m_socket = sock;
 	}
-	virtual ~CLocalSocket() {
+	virtual ~CSocket() {
 		Close();
 	};
 public:
@@ -142,14 +144,20 @@ public:
 		m_param = param;
 		int type = (m_param.attr & SOCK_ISUDP) ? SOCK_DGRAM : SOCK_STREAM;
 		if (m_socket == -1)
-			m_socket = socket(PF_LOCAL, type, 0);
+			if (m_param.attr & SOCK_ISIP)
+				m_socket = socket(PF_INET, type, 0);/*新加网络分支*/
+			else
+				m_socket = socket(PF_LOCAL, type, 0);
 		else
 			m_status = 2;/*accept 来的套接字，已经处于连接状态*/
 		if (m_socket == -1) return -2;
 		int ret = 0;
 		/*如果是服务器执行下面的代码，客户端不执行*/
 		if (m_param.attr & SOCK_ISSERVER) {
-			ret = bind(m_socket, m_param.addrun(), sizeof(sockaddr_un));
+			if (m_param.attr & SOCK_ISIP)
+				ret = bind(m_socket, m_param.addrin(), sizeof(sockaddr_in));
+			else
+				ret = bind(m_socket, m_param.addrun(), sizeof(sockaddr_un));
 			if (ret == -1) return -3;
 			ret = listen(m_socket, 32);
 			if (ret == -1) return -4;
@@ -173,10 +181,19 @@ public:
 		if (m_param.attr & SOCK_ISSERVER) {
 			if (pClient == NULL) return -2;
 			CSockParam param;
-			socklen_t len = sizeof(sockaddr_un);
-			int fd = accept(m_socket, param.addrun(), &len);
+			int fd = -1;
+			socklen_t len = 0;
+			if (m_param.attr & SOCK_ISIP) {
+				param.attr |= SOCK_ISIP;/*将客户端表示设置为ip协议套接字*/
+				len = sizeof(sockaddr_in);
+				fd = accept(m_socket, param.addrin(), &len);
+			}
+			else {/*param.attr默认为本地套接字*/
+				len = sizeof(sockaddr_un);
+				fd = accept(m_socket, param.addrun(), &len);
+			}
 			if (fd == -1)return -3;
-			*pClient = new CLocalSocket(fd);
+			*pClient = new CSocket(fd);
 			if (*pClient == NULL) return -4;
 			ret = (*pClient)->Init(param);/*本地套接字  这里也需要客户端初始化*/
 			if (ret != 0) {
@@ -186,7 +203,10 @@ public:
 			}
 		}
 		else {
-			ret = connect(m_socket, m_param.addrun(), sizeof(sockaddr_un));
+			if (m_param.attr & SOCK_ISIP)
+				ret = connect(m_socket, m_param.addrin(), sizeof(sockaddr_in));
+			else
+				ret = connect(m_socket, m_param.addrun(), sizeof(sockaddr_un));
 			printf("%s(%d):<%s> ret=%d errno:%d msg:%s\n",
 				__FILE__, __LINE__, __FUNCTION__, ret, errno, strerror(errno));
 			if (ret != 0) return -6;

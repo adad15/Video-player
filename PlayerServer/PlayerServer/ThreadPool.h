@@ -31,7 +31,7 @@ public:
 		int ret = 0;
 		if (m_server != NULL) return -1;/*已经初始化了*/
 		if (m_path.size() == 0) return -2;/*构造函数失败*/
-		m_server = new CLocalSocket();
+		m_server = new CSocket();
 		if (m_server == NULL)return -3;
 		ret = m_server->Init(CSockParam(m_path, SOCK_ISSERVER));
 		if (ret != 0)return -4;
@@ -64,7 +64,7 @@ public:
 	}
 	template<typename _FUNCTION_, typename..._ARGS_>
 	int AddTask(_FUNCTION_ func, _ARGS_...args) {/*多个不同的线程调用*/
-		static thread_local CLocalSocket client;/*每个线程的client都不一样，同一个线程一样，不同线程client不一样*/
+		static thread_local CSocket client;/*每个线程的client都不一样，同一个线程一样，不同线程client不一样*/
 		int ret = 0;
 		if (client == -1) {
 			ret = client.Init(CSockParam(m_path, 0));
@@ -84,6 +84,7 @@ public:
 		}
 		return 0;
 	}
+	size_t Size() const { return m_threads.size(); }
 private:
 	int TaskDispatch() {
 		while (m_epoll != -1) {

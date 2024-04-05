@@ -3,8 +3,10 @@ G:\Video player Linux\Video-player\PlayerServer\PlayerServer|/root/projects/Play
 @G:\Video player Linux\Video-player\PlayerServer\PlayerServer|@/root/projects/PlayerServer
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Logger.cpp|/root/projects/PlayerServer/Logger.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp|/root/projects/PlayerServer/main.cpp
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Server.cpp|/root/projects/PlayerServer/Server.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Thread.cpp|/root/projects/PlayerServer/Thread.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Logger.h|/root/projects/PlayerServer/Logger.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Server.h|/root/projects/PlayerServer/Server.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Socket.h|/root/projects/PlayerServer/Socket.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Epoll.h|/root/projects/PlayerServer/Epoll.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Function.h|/root/projects/PlayerServer/Function.h
