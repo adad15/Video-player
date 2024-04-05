@@ -124,7 +124,7 @@ protected:/*设置为保护这样外部不能使用，但是子类可以使用*/
 	CSockParam m_param;
 };
 
-/*本地套接字*/
+/*本地套接字 还没有引入网络模块*/
 class CLocalSocket :public CSocketBase
 {
 public:
