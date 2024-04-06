@@ -5,6 +5,31 @@
 #include "Process.h"
 #include "Logger.h"
 
+/*不能放到Function里面去   防止交叉引用*/
+template<typename _FUNCTION_/*初始化函数类型*/, typename... _ARGS_/*_ARGS_为不定参数类型*/>
+class CReceivedFunction :public CFunctionBase {
+public:
+	CReceivedFunction(_FUNCTION_ func, _ARGS_... args) :m_binder(std::forward<_FUNCTION_>(func)/*完美转发*/, std::forward<_ARGS_>(args).../*表示原地展开，对每一个都调用一个forward*/)
+	{}
+	virtual ~CReceivedFunction() {}/*本身什么都不干，但是会触发m_binder的析构*/
+	virtual int operator()(CSocketBase* pClient, const Buffer& data) {
+		return m_binder(pClient, data);/*帮我们把参数填入到函数中并调用  对外无需填参数*/
+	}
+	typename std::_Bindres_helper<int, _FUNCTION_, _ARGS_...>::type m_binder;
+};
+
+template<typename _FUNCTION_/*初始化函数类型*/, typename... _ARGS_/*_ARGS_为不定参数类型*/>
+class CConnectedFunction :public CFunctionBase {
+public:
+	CConnectedFunction(_FUNCTION_ func, _ARGS_... args) :m_binder(std::forward<_FUNCTION_>(func)/*完美转发*/, std::forward<_ARGS_>(args).../*表示原地展开，对每一个都调用一个forward*/)
+	{}
+	virtual ~CConnectedFunction() {}/*本身什么都不干，但是会触发m_binder的析构*/
+	virtual int operator()(CSocketBase* pClient) {
+		return m_binder(pClient);/*帮我们把参数填入到函数中并调用  对外无需填参数*/
+	}
+	typename std::_Bindres_helper<int, _FUNCTION_, _ARGS_...>::type m_binder;
+};
+
 class CBusiness
 {
 public:
@@ -15,13 +40,13 @@ public:
 
 	template<typename _FUNCTION_, typename..._ARGS_>
 	int setConnectedCallback(_FUNCTION_ func, _ARGS_...args) {
-		m_connectedcallback = new CFunction<_FUNCTION_, _ARGS_...>(func, args...);
+		m_connectedcallback = new CConnectedFunction<_FUNCTION_, _ARGS_...>(func, args...);
 		if (m_connectedcallback == NULL)return -1;
 		return 0;
 	}
 	template<typename _FUNCTION_, typename..._ARGS_>
 	int setRecvCallback(_FUNCTION_ func, _ARGS_...args) {
-		m_recvcallback = new CFunction<_FUNCTION_, _ARGS_...>(func, args...);
+		m_recvcallback = new CReceivedFunction<_FUNCTION_, _ARGS_...>(func, args...);
 		if (m_recvcallback == NULL)return -1;
 		return 0;
 	}

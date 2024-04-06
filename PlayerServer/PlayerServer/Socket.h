@@ -42,6 +42,12 @@ public:
 		addr_in.sin_port = port;
 		addr_in.sin_addr.s_addr = inet_addr(ip);/*调用operator const char* ()const*/
 	}
+	CSockParam(const sockaddr_in* addrin, int arrt) {
+		this->ip = ip;
+		this->port = port;
+		this->attr = attr;
+		memcpy(&addr_in, addrin, sizeof(addr_in));
+	}
 	/*本地套接字初始化  参数地址*/
 	CSockParam(const Buffer& path, int attr) {
 		ip = path;
@@ -117,6 +123,8 @@ public:
 	}
 	virtual operator int() { return m_socket; }
 	virtual operator int()const { return m_socket; }
+	virtual operator const sockaddr_in*() const{ return &m_param.addr_in; }
+	virtual operator sockaddr_in* () { return &m_param.addr_in; }
 protected:/*设置为保护这样外部不能使用，但是子类可以使用*/
 	/*套接字描述符 默认为-1*/
 	int m_socket;

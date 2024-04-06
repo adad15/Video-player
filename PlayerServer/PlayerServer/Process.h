@@ -119,6 +119,79 @@ public:
 		return 0;
 	}
 
+	int SendSocket(int fd, const sockaddr_in* addrin) {
+		struct msghdr msg;
+		/*没有实际用途*/
+		struct iovec iov[2];
+		char buf[2][10] = { "edoyun","jueding" };
+		iov[0].iov_base = (void*)addrin;
+		iov[0].iov_len = sizeof(sockaddr_in);
+		iov[1].iov_base = buf[1];
+		iov[1].iov_len = sizeof(buf[1]);
+		/*大坑！！！ 这个必须要有*/
+		msg.msg_name = NULL;
+		msg.msg_namelen = 0;
+		msg.msg_iov = iov;
+		msg.msg_iovlen = 2;
+
+		/*实际要传输的数据(文件描述符)*/
+		cmsghdr* cmsg = new cmsghdr;
+		bzero(cmsg, sizeof(cmsghdr));
+		if (cmsg == NULL) return -1;
+		cmsg->cmsg_len = CMSG_LEN(sizeof(int));/*追加一个len*/
+		cmsg->cmsg_level = SOL_SOCKET;/*套接字连接*/
+		cmsg->cmsg_type = SCM_RIGHTS;/*拿到权限*/
+		*(int*)CMSG_DATA(cmsg) = fd;
+		printf("%s(%d):<%s> fd=%d\n", __FILE__, __LINE__, __FUNCTION__, fd);
+		msg.msg_control = cmsg;
+		msg.msg_controllen = cmsg->cmsg_len;
+
+		ssize_t ret = sendmsg(pipes[1], &msg, 0);
+		printf("%s(%d):<%s> ret=%d errno:%d msg:%s\n",
+			__FILE__, __LINE__, __FUNCTION__, ret, errno, strerror(errno));
+		if (ret == -1) {
+			delete cmsg;
+			return -2;
+		}
+		delete cmsg;
+		return 0;
+	}
+
+	int RecvSocket(int& fd, sockaddr_in* addrin) {/*返回值表状态，输出参数用来传递修改后参数*/
+		msghdr msg;
+		iovec iov[2];
+		char buf[][10] = { "","" };
+		iov[0].iov_base = addrin;
+		iov[0].iov_len = sizeof(sockaddr_in);
+		iov[1].iov_base = buf[1];
+		iov[1].iov_len = sizeof(buf[1]);
+		msg.msg_name = NULL;
+		msg.msg_namelen = 0;
+		msg.msg_iov = iov;
+		msg.msg_iovlen = 2;
+
+		cmsghdr* cmsg = new cmsghdr;
+		bzero(cmsg, sizeof(cmsghdr));
+		if (cmsg == NULL) return -1;
+		cmsg->cmsg_len = CMSG_LEN(sizeof(int));
+		cmsg->cmsg_level = SOL_SOCKET;
+		cmsg->cmsg_type = SCM_RIGHTS;
+		msg.msg_control = cmsg;
+		msg.msg_controllen = cmsg->cmsg_len;
+
+		ssize_t ret = recvmsg(pipes[0], &msg, 0);
+		printf("%s(%d):<%s> pid=%d errno:%d msg:%s\n",
+			__FILE__, __LINE__, __FUNCTION__, getpid(), errno, strerror(errno));
+		if (ret == -1) {
+			delete cmsg;
+			return -2;
+		}
+		fd = *(int*)CMSG_DATA(cmsg);
+		printf("%s(%d):<%s> fd=%d\n", __FILE__, __LINE__, __FUNCTION__, fd);
+		delete cmsg;
+		return 0;
+	}
+
 	/*守护进程*/
 	static int SwitchDeamon() {
 		pid_t ret = fork();

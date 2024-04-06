@@ -4,9 +4,13 @@
   正在验证体系结构
   正在启动远程生成
   正在编译源:
+  Epoll.cpp
+  Logger.cpp
   main.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(33,9): warning : unused variable ‘ret’ [-Wunused-variable]
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(33,9): warning :    33 |     int ret = proc->RecvFD(fd);
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(33,9): warning :       |         ^~~
+  Server.cpp
+  Thread.cpp
   正在链接对象
   PlayerServer.vcxproj -> G:\Video player Linux\Video-player\PlayerServer\PlayerServer\bin\x64\Debug\PlayerServer.out
