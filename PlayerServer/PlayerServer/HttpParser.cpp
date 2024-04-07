@@ -175,8 +175,8 @@ int UrlParser::Parser()
 	target = strchr(value, ':');/*target:域名*/
 	if (target != NULL) {
 		/*说明有端口信息*/
-		m_host = Buffer(pos, target);
-		m_port = atoi(Buffer(target + 1, pos + value.size()));
+		m_host = Buffer(value, target);
+		m_port = atoi(Buffer(target + 1, (char*)value + value.size()));
 	}
 	else {
 		m_host = value;

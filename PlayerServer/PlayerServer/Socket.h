@@ -18,7 +18,7 @@ public:
 		memcpy((char*)c_str(), str, length);
 	}
 	Buffer(const char* begin, const char* end) :std::string() {
-		int len = end - begin;/*包含begin不包含end*/
+		long int len = end - begin;/*包含begin不包含end*/
 		if (len > 0) {
 			resize(len);
 			memcpy((char*)c_str(), begin, len);

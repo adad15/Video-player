@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "MyPlayerServer.h"
+#include "HttpParser.h"
 
 
 /*入口函数*/
@@ -91,8 +92,7 @@ int oldtest() {
 	return 0;
 }
 
-int main()
-{
+int oldtest1() {
 	int ret{};
 	CProcess proclog;
 	ret = proclog.SetEntryFunction(CreatLogServer, &proclog);
@@ -105,7 +105,56 @@ int main()
 	ERR_RETURN(ret, -3);
 	ret = server.Run();
 	ERR_RETURN(ret, -4);
-	
+
 
 	return 0;
 }
+
+int http_test() {
+	Buffer str = "GET /sample.jsp HTTP/1.1\r\n"
+		"Accept: image/gif.image/jpeg\r\n"
+		"Accept-Language: zh-cn\r\n"
+		"Connection: Keep-Alive\r\n"
+		"Host: localhost\r\n"
+		"User-Agent: Mozila/4.0(compatible;MSIE5.01;Window NT5.0)\r\n"
+		"Accept-Encoding: gzip,deflate\r\n"
+		"\r\n";
+	CHttpParser parser;
+	size_t size = parser.Parser(str);
+	if (size == 0) {
+		printf("failed1\n");
+	}
+	if (parser.Errno() != 0) {
+		printf("errno %d\n", parser.Errno());
+		return -1;
+	}
+// 	if (size != 365) {
+// 		printf("size errno:%lld\n", size);
+// 		return -2;
+// 	}
+	printf("Method %d url %s\n", parser.Method(), (char*)parser.Url());
+
+	UrlParser url1("https://cn.bing.com/search?q=http%e8%af%b7%e6%b1%82%e4%bd%93&qs=RI&pq=http%e4%bd%93&sc=8-5&cvid=6CDB814315094235A46D35B1335D2FA2&FORM=QBRE&sp=1&lq=0");
+	int ret = url1.Parser();
+	if (ret != 0) {
+		printf("UrlParser failed:%d\n", ret);
+	}
+	printf("q = %s\n", (char*)url1["q"]);
+	printf("qs = %s\n", (char*)url1["qs"]);
+	printf("pq = %s\n", (char*)url1["pq"]);
+	printf("sc = %s\n", (char*)url1["sc"]);
+	printf("cvid = %s\n", (char*)url1["cvid"]);
+	printf("FORM = %s\n", (char*)url1["FORM"]);
+	printf("sp = %s\n", (char*)url1["sp"]);
+	printf("lq = %s\n", (char*)url1["lq"]);
+	return 0;
+}
+
+int main()
+{
+	int ret = http_test();
+	printf("ret = %d\n", ret);
+	return ret;
+}
+
+
