@@ -49,3 +49,22 @@ protected:
 	int OnMessageComplete();
 };
 
+class UrlParser {
+public:
+	UrlParser(const Buffer& url);
+	~UrlParser() {}
+	/*解析*/
+	int Parser();
+	Buffer operator[](const Buffer& name)const;
+	Buffer Protocol()const { return m_protocol; }
+	Buffer Host()const { return m_host; }
+	int Port()const { return m_port; }/*默认返回80*/
+	void SetUrl(const Buffer& url);/*修改url*/
+private:
+	Buffer m_url;/*原始的url*/
+	Buffer m_protocol;/*协议*/
+	Buffer m_host;
+	Buffer m_uri;
+	int m_port;
+	std::map<Buffer, Buffer>m_values;
+};

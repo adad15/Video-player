@@ -17,6 +17,13 @@ public:
 		resize(length);
 		memcpy((char*)c_str(), str, length);
 	}
+	Buffer(const char* begin, const char* end) :std::string() {
+		int len = end - begin;/*°üº¬begin²»°üº¬end*/
+		if (len > 0) {
+			resize(len);
+			memcpy((char*)c_str(), begin, len);
+		}
+	}
 	operator char* () { return (char*)c_str(); }
 	operator char* ()const { return (char*)c_str(); }
 	operator const char* ()const { return c_str(); }

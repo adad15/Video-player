@@ -146,3 +146,88 @@ int CHttpParser::OnMessageComplete()
 	m_complete = true;
 	return 0;
 }
+
+UrlParser::UrlParser(const Buffer& url)
+{
+	m_url = url;
+}
+
+int UrlParser::Parser()
+{
+	//分三步：协议、域名和端口、uri、键值对
+	//解析协议
+	const char* pos = m_url;
+	const char* target = strstr(pos, "://");
+	if (target == NULL) return -1;
+	/*pos 到 target-1这部分都是协议部分*/
+	m_protocol = Buffer(pos, target);
+	//解析域名和端口
+	pos = target + 3;
+	target = strchr(pos, '/');
+	if (target == NULL) {
+		if (m_protocol.size() + 3 >= m_url.size())
+			return -2;/*url 不全*/
+		m_host = pos;/*设置域名*/
+		return 0;
+	}
+	Buffer value = Buffer(pos, target);/*target:域名+端口*/
+	if (value.size() == 0)return -3;
+	target = strchr(value, ':');/*target:域名*/
+	if (target != NULL) {
+		/*说明有端口信息*/
+		m_host = Buffer(pos, target);
+		m_port = atoi(Buffer(target + 1, pos + value.size()));
+	}
+	else {
+		m_host = value;
+	}
+	pos = strchr(pos, '/');/*反斜杠也算进后面的数据了*/
+	//解析uri
+	target = strchr(pos, '?');
+	if (target == NULL) {
+		m_uri = pos;/*空*/
+		return 0;
+	}
+	else {
+		m_uri = Buffer(pos, target);
+		//解析key和value
+		pos = target + 1;
+		const char* t = NULL;
+		do 
+		{
+			target = strchr(pos, '&');
+			if (target == NULL) {
+				t = strchr(pos, '=');
+				if (t == NULL)return -4;
+				m_values[Buffer(pos, t)/*key*/] = Buffer(t + 1);
+				/*之后target为空就跳出了while循环*/
+			}
+			else {
+				Buffer kv(pos, target);
+				t = strchr(kv, '=');
+				if (t == NULL)return -5;
+				m_values[Buffer(kv, t)/*key*/] = Buffer(t + 1, kv.size());/*value*/
+				pos = target + 1;
+			}
+		} while (target != NULL);
+	}
+
+	return 0;
+}
+
+Buffer UrlParser::operator[](const Buffer& name) const
+{
+	auto it = m_values.find(name);
+	if (it == m_values.end())return Buffer();
+	return it->second;
+}
+
+void UrlParser::SetUrl(const Buffer& url)
+{
+	m_url = url;
+	/*重新设置了要重新去拿*/
+	m_protocol = "";
+	m_host = "";
+	m_port = 80;
+	m_values.clear();
+}
