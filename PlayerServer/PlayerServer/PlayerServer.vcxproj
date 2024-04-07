@@ -75,6 +75,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="DataBaseHelper.cpp" />
     <ClCompile Include="Epoll.cpp" />
     <ClCompile Include="HttpParser.cpp" />
     <ClCompile Include="http_parser.c" />
@@ -84,10 +85,12 @@
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DataBaseHelper.h" />
     <ClInclude Include="HttpParser.h" />
     <ClInclude Include="http_parser.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MyPlayerServer.h" />
+    <ClInclude Include="Public.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="Epoll.h" />

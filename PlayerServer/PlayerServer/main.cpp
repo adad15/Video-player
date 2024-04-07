@@ -1,5 +1,4 @@
 ﻿#include <cstdio>
-
 #include <stdlib.h>
 #include <errno.h>
 #include "MyPlayerServer.h"
