@@ -6,7 +6,7 @@
 class CHttpParser
 {
 private:
-	http_parser m_parser;
+	http_parser m_parser;/*头部的数据*/
 	http_parser_settings m_settings;
 	std::map<Buffer, Buffer> m_HeaderValues;
 	Buffer m_status;

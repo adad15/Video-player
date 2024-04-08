@@ -5,8 +5,10 @@ G:\Video player Linux\Video-player\PlayerServer\PlayerServer\http_parser.c|63848
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Logger.cpp|638477717823198071|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp|638481169987015381|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Server.cpp|638480350324172224|~/projects/PlayerServer/|
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Sqlite3Client.cpp|638481840006690672|~/projects/PlayerServer/|
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c|637157823140000000|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Thread.cpp|638476976599747869|~/projects/PlayerServer/|
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\DataBaseHelper.h|638481205004659033|~/projects/PlayerServer/|
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\DataBaseHelper.h|638481787792933689|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\HttpParser.h|638481169986955387|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\http_parser.h|638480935713058688|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Logger.h|638481164103912843|~/projects/PlayerServer/|
@@ -17,5 +19,8 @@ G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Socket.h|6384811707
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Epoll.h|638479109730534819|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Function.h|638480350323064455|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Process.h|638480309603853304|~/projects/PlayerServer/|
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Sqlite3Client.h|638481846237243390|~/projects/PlayerServer/|
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.h|637157823140000000|~/projects/PlayerServer/|
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3ext.h|637157823140000000|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Thread.h|638479109730664755|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\ThreadPool.h|638479360626868362|~/projects/PlayerServer/|

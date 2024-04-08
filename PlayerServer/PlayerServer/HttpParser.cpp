@@ -1,5 +1,5 @@
 #include "HttpParser.h"
-
+/*解析url*/
 CHttpParser::CHttpParser()
 {
 	m_complete = false;
@@ -64,7 +64,8 @@ size_t CHttpParser::Parser(const Buffer& data)
 {
 	m_complete = false;
 	/*开始解析*/
-	size_t ret = http_parser_execute(&m_parser, &m_settings, data, data.size());
+	/*m_parser里面含有CHttpParser对象，解析后的数据放在这里              要解析的url */
+	size_t ret = http_parser_execute(&m_parser, &m_settings/*回调函数*/, data, data.size());
 	if (m_complete == false) {
 		m_parser.http_errno = 0x7F;
 		return 0;
@@ -74,6 +75,7 @@ size_t CHttpParser::Parser(const Buffer& data)
 
 int CHttpParser::OnMessageBegin(http_parser* parser)
 {
+	/*(CHttpParser*)parser->data是CHttpParser对象的this指针*/
 	return ((CHttpParser*)parser->data)->OnMessageBegin();
 }
 int CHttpParser::OnUrl(http_parser* parser, const char* at, size_t length)

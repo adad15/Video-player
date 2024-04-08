@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="DataBaseHelper.cpp" />
+    <ClCompile Include="Epoll.cpp" />
+    <ClCompile Include="HttpParser.cpp" />
+    <ClCompile Include="http_parser.c" />
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Server.cpp" />
+    <ClCompile Include="Thread.cpp" />
+    <ClCompile Include="sqlite3\sqlite3.c">
+      <Filter>sqlite3</Filter>
+    </ClCompile>
+    <ClCompile Include="Sqlite3Client.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DataBaseHelper.h" />
+    <ClInclude Include="HttpParser.h" />
+    <ClInclude Include="http_parser.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="MyPlayerServer.h" />
+    <ClInclude Include="Public.h" />
+    <ClInclude Include="Server.h" />
+    <ClInclude Include="Socket.h" />
+    <ClInclude Include="Epoll.h" />
+    <ClInclude Include="Function.h" />
+    <ClInclude Include="Process.h" />
+    <ClInclude Include="Thread.h" />
+    <ClInclude Include="ThreadPool.h" />
+    <ClInclude Include="sqlite3\sqlite3.h">
+      <Filter>sqlite3</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite3\sqlite3ext.h">
+      <Filter>sqlite3</Filter>
+    </ClInclude>
+    <ClInclude Include="Sqlite3Client.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="sqlite3">
+      <UniqueIdentifier>{2d36b7f2-772e-48f6-ad07-758d9fb99e9b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
