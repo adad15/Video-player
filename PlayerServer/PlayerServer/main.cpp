@@ -229,6 +229,12 @@ DECLARE_MYSQL_FIELD(TYPE_VARCHAR, user_qq, NOT_NULL, "VARCHAR", "(15)", "", "")
 DECLARE_MYSQL_FIELD(TYPE_VARCHAR, user_phone, NOT_NULL | DEFAULT, "VARCHAR", "(12)", "18888888888", "")
 DECLARE_MYSQL_FIELD(TYPE_TEXT, user_name, 0, "TEXT", "", "", "")
 DECLARE_TABLE_CLASS_END()
+/*debian-sys-maint
+* y1F8d0KWbgaZ0hui
+*/
+
+//ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY '123456';
+
 
 int mysql_test() {
 	user_test_mysql test, value;

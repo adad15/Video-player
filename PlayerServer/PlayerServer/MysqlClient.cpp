@@ -6,7 +6,8 @@ int CMysqlClient::Connect(const KeyValue& args)
 {
 	if (m_isInit) return -1;
 	MYSQL* ret = mysql_init(&m_db);
-	if (ret == NULL) return -2;
+	if (ret == NULL) 
+		return -2;
 	ret = mysql_real_connect(&m_db, args.at("host"), args.at("user"), args.at("password"), args.at("db"), atoi(args.at("port")), NULL, 0);
 	if ((ret == NULL) && (mysql_errno(&m_db) != 0)) {
 		printf("%s %s\n", __FUNCTION__, mysql_errno(&m_db));
