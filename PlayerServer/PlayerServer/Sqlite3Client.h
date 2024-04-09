@@ -47,11 +47,64 @@ private:
 		ExecParam(CSqlite3Client* obj, Result& result, const _Table_& table) 
 			:obj(obj), result(result), table(table)
 		{}
-		~ExecParam();
-
 		CSqlite3Client* obj;
 		Result& result;
 		const _Table_& table;
 	};
 };
 
+class _sqlite3_table_ :public _Table_
+{
+public:
+	_sqlite3_table_() :_Table_() {}
+	_sqlite3_table_(const _sqlite3_table_& table);
+	virtual ~_sqlite3_table_() {}
+	//返回创建的SQL语句
+	virtual Buffer Create();
+	//删除表
+	virtual Buffer Drop();
+	//增删改查
+	virtual Buffer Insert(const _Table_& values);
+	virtual Buffer Delete(const _Table_& values);
+	virtual Buffer Modify(const _Table_& values);
+	virtual Buffer Query();
+	//创建一个基于表的对象
+	virtual PTable Copy()const;
+	virtual void ClearFieldUsed();
+public:
+	//获取表的全名
+	virtual operator const Buffer() const;
+};
+
+class _sqlite3_field_ :public _Field_
+{
+public:
+	_sqlite3_field_();
+	_sqlite3_field_(
+		int ntype,
+		const Buffer& name,
+		unsigned attr,
+		const Buffer& type,
+		const Buffer& size,
+		const Buffer& default_,
+		const Buffer& check
+	);
+	_sqlite3_field_(const _sqlite3_field_& field);
+	virtual ~_sqlite3_field_();
+	virtual Buffer Create();
+	virtual void LoadFromStr(const Buffer& str);
+	//where 语句使用的
+	virtual Buffer toEqualExp() const;/*转换成等号表达式*/
+	virtual Buffer toSqlStr() const;
+	//列的全名
+	virtual operator const Buffer() const;
+private:
+	Buffer Str2Hex(const Buffer& data) const;
+	union {
+		bool Bool;
+		int Integer;/*整数*/
+		double Double;
+		Buffer* String;/*联合体不会调用构造，所以这里使用指针*/
+	}Value;
+	int nType;
+};

@@ -58,6 +58,7 @@ public:
 	virtual Buffer Query() = 0;
 	/*创建一个基于表的对象*/
 	virtual PTable Copy()const = 0;
+	virtual void ClearFieldUsed() = 0;
 public:
 	/*获取表的全名*/
 	virtual operator const Buffer() const = 0;
@@ -65,8 +66,34 @@ public:
 	/*表所属的DB的名称  数据库服务器有许多DB 每个DB有多张表*/
 	Buffer Database;
 	Buffer Name;/*数据库的名称*/
-	FieldArray FieldDefune;/*列的定义 存储查询结果*/
+	FieldArray FieldDefine;/*列的定义 存储查询结果*/
 	FiledMap Fields;/*列的定义映射表  专门为查找设计的*/
+};
+
+enum {
+	SQL_INSERT = 1,//插入的列
+	SQL_MODIFY = 2,//修改的列
+	SQL_CONDITION = 4//查询条件列
+};
+
+enum {
+	NOT_NULL = 1,
+	DEFAULT = 2,/*默认值*/
+	UNIQUE = 4,/*唯一*/
+	PRIMARY_KEY = 8,/*主键*/
+	CHECK = 16,/*约束*/
+	AUTOINCREMENT = 32/*自动增长*/
+};
+
+using SqlType = enum {
+	TYPE_NULL = 0,
+	TYPE_BOOL = 1,
+	TYPE_INT = 2,
+	TYPE_DATETIME = 4,
+	TYPE_REAL = 8,/*小数*/
+	TYPE_VARCHAR = 16,
+	TYPE_TEXT = 32,
+	TYPE_BLOB = 64
 };
 
 class _Field_ {
@@ -105,4 +132,17 @@ public:
 	unsigned Attr;/*属性*/
 	Buffer Default;/*默认值*/
 	Buffer Check;/*约束条件*/
+public:
+	unsigned Condition;/*操作条件*/
 };
+
+/*使用宏定义来简化数据库表的创建*/
+#define DECLARE_TABLE_CLASS(name,base)class name:public base{ \
+public: \
+virtual PTable Copy()const {return PTable(new name(*this));} \
+name():base(){Name=#name;
+
+#define DECLARE_FIELD(ntype,name,attr,type,size,default_,check) \
+{PField field(new _sqlite3_field_(ntype, #name,attr, type, size, default_,check)); FieldDefine.push_back(field); Fields[#name] = field; }
+
+#define DECLARE_TABLE_CLASS_END()}};
