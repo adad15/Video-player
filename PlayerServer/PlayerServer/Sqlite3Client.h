@@ -108,3 +108,14 @@ private:
 	}Value;
 	int nType;
 };
+
+/*使用宏定义来简化数据库表的创建*/
+#define DECLARE_TABLE_CLASS(name,base)class name:public base{ \
+public: \
+virtual PTable Copy()const {return PTable(new name(*this));} \
+name():base(){Name=#name;
+
+#define DECLARE_FIELD(ntype,name,attr,type,size,default_,check) \
+{PField field(new _sqlite3_field_(ntype, #name,attr, type, size, default_,check)); FieldDefine.push_back(field); Fields[#name] = field; }
+
+#define DECLARE_TABLE_CLASS_END()}};

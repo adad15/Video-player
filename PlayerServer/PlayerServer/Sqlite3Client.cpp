@@ -48,7 +48,6 @@ int CSqlite3Client::Exec(const Buffer& sql, Result& result, const _Table_& table
 int CSqlite3Client::StartTransaction()
 {
     if (m_db == NULL) return -1;
-	if (m_db == NULL)return -1;
 	int ret = sqlite3_exec(m_db, "BEGIN TRANSACTION", 0, 0, NULL);/*÷¥––’‚Ãısql”Ôæ‰*/
     if (ret != SQLITE_OK) {
         TRACEE("sql={BEGIN TRANSACTION}");

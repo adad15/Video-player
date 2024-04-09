@@ -10,9 +10,10 @@
   http_parser.c
   Logger.cpp
   main.cpp
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(33,9): warning : unused variable ‘ret’ [-Wunused-variable]
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(33,9): warning :    33 |     int ret = proc->RecvFD(fd);
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(33,9): warning :       |         ^~~
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(34,9): warning : unused variable ‘ret’ [-Wunused-variable]
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(34,9): warning :    34 |     int ret = proc->RecvFD(fd);
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(34,9): warning :       |         ^~~
+  MysqlClient.cpp
   Server.cpp
   Sqlite3Client.cpp
   sqlite3.c

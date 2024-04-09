@@ -4,6 +4,7 @@
 #include "MyPlayerServer.h"
 #include "HttpParser.h"
 #include "Sqlite3Client.h"
+#include "MysqlClient.h"
 
 /*入口函数*/
 int CreatLogServer(CProcess* proc) {
@@ -180,7 +181,7 @@ DECLARE_FIELD(TYPE_VARCHAR, user_phone, NOT_NULL|DEFAULT, "VARCHAR", "(12)", "18
 DECLARE_FIELD(TYPE_TEXT, user_name, 0, "TEXT", "", "", "")
 DECLARE_TABLE_CLASS_END()
 
-int sal_test() {
+int sqlite_test() {
 	user_test test, value;
 	printf("create:%s\n", (char*)test.Create());
 	printf("Delete:%s\n", (char*)test.Delete(test));
@@ -222,10 +223,63 @@ int sal_test() {
 	return 0;
 }
 
+DECLARE_TABLE_CLASS(user_test_mysql, _mysql_table_)
+DECLARE_MYSQL_FIELD(TYPE_INT, user_id, NOT_NULL | PRIMARY_KEY | AUTOINCREMENT, "INTEGER", "", "", "")
+DECLARE_MYSQL_FIELD(TYPE_VARCHAR, user_qq, NOT_NULL, "VARCHAR", "(15)", "", "")
+DECLARE_MYSQL_FIELD(TYPE_VARCHAR, user_phone, NOT_NULL | DEFAULT, "VARCHAR", "(12)", "18888888888", "")
+DECLARE_MYSQL_FIELD(TYPE_TEXT, user_name, 0, "TEXT", "", "", "")
+DECLARE_TABLE_CLASS_END()
+
+int mysql_test() {
+	user_test_mysql test, value;
+	printf("create:%s\n", (char*)test.Create());
+	printf("Delete:%s\n", (char*)test.Delete(test));
+	value.Fields["user_qq"]->LoadFromStr("3012265452");
+	value.Fields["user_qq"]->Condition = SQL_INSERT;
+	printf("Insert:%s\n", (char*)test.Insert(value));
+	value.Fields["user_qq"]->LoadFromStr("123456789");
+	value.Fields["user_qq"]->Condition = SQL_MODIFY;
+	printf("Modify:%s\n", (char*)test.Modify(value));
+	printf("Query:%s\n", (char*)test.Query());
+	printf("Drop:%s\n", (char*)test.Drop());
+	getchar();
+	int ret = 0;
+	CDataBaseClient* pClient = new CMysqlClient();
+	KeyValue args;
+	args["host"] = "127.0.0.1";
+	args["user"] = "root";
+	args["password"] = "1218130";
+	args["port"] = 3306;
+	args["db"] = "hello";
+	ret = pClient->Connect(args);
+	printf("%s(%d):<%s> ret=%d\n", __FILE__, __LINE__, __FUNCTION__, ret);
+	ret = pClient->Exec(test.Create());
+	printf("%s(%d):<%s> ret=%d\n", __FILE__, __LINE__, __FUNCTION__, ret);
+	ret = pClient->Exec(test.Delete(value));
+	printf("%s(%d):<%s> ret=%d\n", __FILE__, __LINE__, __FUNCTION__, ret);
+	value.Fields["user_qq"]->LoadFromStr("3012265452");
+	value.Fields["user_qq"]->Condition = SQL_INSERT;
+	ret = pClient->Exec(test.Insert(value));
+	printf("%s(%d):<%s> ret=%d\n", __FILE__, __LINE__, __FUNCTION__, ret);
+	value.Fields["user_qq"]->LoadFromStr("123456789");
+	value.Fields["user_qq"]->Condition = SQL_MODIFY;
+	ret = pClient->Exec(test.Modify(value));
+	printf("%s(%d):<%s> ret=%d\n", __FILE__, __LINE__, __FUNCTION__, ret);
+	Result result;
+	ret = pClient->Exec(test.Query(), result, test);
+	printf("%s(%d):<%s> ret=%d\n", __FILE__, __LINE__, __FUNCTION__, ret);
+	ret = pClient->Exec(test.Drop());
+	printf("%s(%d):<%s> ret=%d\n", __FILE__, __LINE__, __FUNCTION__, ret);
+	ret = pClient->Close();
+	printf("%s(%d):<%s> ret=%d\n", __FILE__, __LINE__, __FUNCTION__, ret);
+	getchar();
+	return 0;
+}
+
 int main()
 {
 	int ret = 0;
-	ret = sal_test();
+	ret = mysql_test();
 	printf("ret = %d\n", ret);
 	return ret;
 }

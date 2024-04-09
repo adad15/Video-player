@@ -4,6 +4,7 @@ G:\Video player Linux\Video-player\PlayerServer\PlayerServer\HttpParser.cpp;G:\V
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\http_parser.c;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\http_parser.o
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Logger.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\Logger.o
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\main.o
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\MysqlClient.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\MysqlClient.o
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Server.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\Server.o
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Sqlite3Client.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\Sqlite3Client.o
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\sqlite3.o
