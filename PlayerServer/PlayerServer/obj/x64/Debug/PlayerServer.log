@@ -5,8 +5,8 @@
   正在启动远程生成
   正在编译源:
   main.cpp
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(34,9): warning : unused variable ‘ret’ [-Wunused-variable]
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(34,9): warning :    34 |     int ret = proc->RecvFD(fd);
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(34,9): warning :       |         ^~~
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(35,9): warning : unused variable ‘ret’ [-Wunused-variable]
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(35,9): warning :    35 |     int ret = proc->RecvFD(fd);
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(35,9): warning :       |         ^~~
   正在链接对象
   PlayerServer.vcxproj -> G:\Video player Linux\Video-player\PlayerServer\PlayerServer\bin\x64\Debug\PlayerServer.out

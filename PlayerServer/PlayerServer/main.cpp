@@ -5,6 +5,7 @@
 #include "HttpParser.h"
 #include "Sqlite3Client.h"
 #include "MysqlClient.h"
+#include <openssl/md5.h>
 
 /*入口函数*/
 int CreatLogServer(CProcess* proc) {
@@ -252,11 +253,11 @@ int mysql_test() {
 	int ret = 0;
 	CDataBaseClient* pClient = new CMysqlClient();
 	KeyValue args;
-	args["host"] = "127.0.0.1";
+	args["host"] = "0.0.0.0";
 	args["user"] = "root";
-	args["password"] = "1218130";
+	args["password"] = "123456";
 	args["port"] = 3306;
-	args["db"] = "hello";
+	args["db"] = "hello_db";
 	ret = pClient->Connect(args);
 	printf("%s(%d):<%s> ret=%d\n", __FILE__, __LINE__, __FUNCTION__, ret);
 	ret = pClient->Exec(test.Create());

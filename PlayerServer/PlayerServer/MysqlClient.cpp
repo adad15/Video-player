@@ -10,14 +10,10 @@ int CMysqlClient::Connect(const KeyValue& args)
 		return -2;
 	ret = mysql_real_connect(&m_db, args.at("host"), args.at("user"), args.at("password"), args.at("db"), atoi(args.at("port")), NULL, 0);
 	if ((ret == NULL) && (mysql_errno(&m_db) != 0)) {
-		printf("%s %s\n", __FUNCTION__, mysql_errno(&m_db));
+		printf("%s %d\n", __FUNCTION__, mysql_errno(&m_db));
 		mysql_close(&m_db);
 		bzero(&m_db, sizeof(m_db));
 		return -3;
-	}
-	if (args.at("db").size() > 0) {
-		int ret = Exec("use " + args.at("db") + " ;");
-		if (ret != 0)return -4;
 	}
 	m_isInit = true;
 	return 0;
