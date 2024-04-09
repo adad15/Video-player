@@ -99,7 +99,7 @@ bool CSqlite3Client::IsConnected()
     return m_db != NULL;
 }
 
-int CSqlite3Client::ExecCallback(void* arg, int count, char** names, char** values)
+int CSqlite3Client::ExecCallback(void* arg, int count, char** values, char** names)
 {
     ExecParam* param = (ExecParam*)arg;
     return param->obj->ExecCallback(param->result, param->table, count, names, values);

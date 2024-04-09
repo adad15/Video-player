@@ -5,7 +5,7 @@ G:\Video player Linux\Video-player\PlayerServer\PlayerServer\http_parser.c|63848
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Logger.cpp|638477717823198071|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp|638482738060115636|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Server.cpp|638480350324172224|~/projects/PlayerServer/|
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Sqlite3Client.cpp|638482739247471418|~/projects/PlayerServer/|
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Sqlite3Client.cpp|638482745734999194|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c|637157823140000000|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Thread.cpp|638476976599747869|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\DataBaseHelper.h|638482721316110752|~/projects/PlayerServer/|
@@ -19,7 +19,7 @@ G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Socket.h|6384811707
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Epoll.h|638479109730534819|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Function.h|638480350323064455|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Process.h|638480309603853304|~/projects/PlayerServer/|
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Sqlite3Client.h|638482081423357819|~/projects/PlayerServer/|
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Sqlite3Client.h|638482746454845411|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.h|637157823140000000|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3ext.h|637157823140000000|~/projects/PlayerServer/|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Thread.h|638479109730664755|~/projects/PlayerServer/|

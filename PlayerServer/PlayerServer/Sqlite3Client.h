@@ -36,7 +36,7 @@ public:
 private:
 	/*回调函数*/
 	/*回调函数的设计思想 使用静态成员函数转到成员函数*/
-	static int ExecCallback(void* arg, int count, char** names, char** values);
+	static int ExecCallback(void* arg, int count, char** values, char** names);
 	int ExecCallback(Result& result, const _Table_& table, int count, char** names, char** values);
 private:
 	sqlite3_stmt* m_stmt;
