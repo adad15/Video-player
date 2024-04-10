@@ -5,7 +5,7 @@
 #include "HttpParser.h"
 #include "Sqlite3Client.h"
 #include "MysqlClient.h"
-#include <openssl/md5.h>
+#include "Crypto.h"
 
 /*入口函数*/
 int CreatLogServer(CProcess* proc) {
@@ -283,10 +283,18 @@ int mysql_test() {
 	return 0;
 }
 
+int crypto_test() {
+	Buffer data = "abcdef";
+	data = Crypto::MD5(data);
+	printf("except E80B5017098950FC58AAD83C8C14978E  %s\n", (char*)data);
+	return 0;
+}
+
+
 int main()
 {
 	int ret = 0;
-	ret = mysql_test();
+	ret = crypto_test();
 	printf("ret = %d\n", ret);
 	return ret;
 }

@@ -1,6 +1,7 @@
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\DataBaseHelper.cpp|/root/projects/PlayerServer/DataBaseHelper.cpp
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Crypto.cpp|/root/projects/PlayerServer/Crypto.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer|/root/projects/PlayerServer
 @G:\Video player Linux\Video-player\PlayerServer\PlayerServer|@/root/projects/PlayerServer
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\DataBaseHelper.cpp|/root/projects/PlayerServer/DataBaseHelper.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Epoll.cpp|/root/projects/PlayerServer/Epoll.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\HttpParser.cpp|/root/projects/PlayerServer/HttpParser.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\http_parser.c|/root/projects/PlayerServer/http_parser.c
@@ -13,6 +14,7 @@ G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c|/
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3|/root/projects/PlayerServer/sqlite3
 @G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3|@/root/projects/PlayerServer/sqlite3
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Thread.cpp|/root/projects/PlayerServer/Thread.cpp
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Crypto.h|/root/projects/PlayerServer/Crypto.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\DataBaseHelper.h|/root/projects/PlayerServer/DataBaseHelper.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\HttpParser.h|/root/projects/PlayerServer/HttpParser.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\http_parser.h|/root/projects/PlayerServer/http_parser.h

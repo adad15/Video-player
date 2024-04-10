@@ -208,7 +208,7 @@ int UrlParser::Parser()
 				Buffer kv(pos, target);
 				t = strchr(kv, '=');
 				if (t == NULL)return -5;
-				m_values[Buffer(kv, t)/*key*/] = Buffer(t + 1, kv.size());/*value*/
+				m_values[Buffer(kv, t)/*key*/] = Buffer(t + 1, (char*)kv + kv.size());/*value*/
 				pos = target + 1;
 			}
 		} while (target != NULL);

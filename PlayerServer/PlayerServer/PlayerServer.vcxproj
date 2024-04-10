@@ -83,6 +83,7 @@
     </SourcePath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="Crypto.cpp" />
     <ClCompile Include="DataBaseHelper.cpp" />
     <ClCompile Include="Epoll.cpp" />
     <ClCompile Include="HttpParser.cpp" />
@@ -103,6 +104,7 @@
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Crypto.h" />
     <ClInclude Include="DataBaseHelper.h" />
     <ClInclude Include="HttpParser.h" />
     <ClInclude Include="http_parser.h" />
@@ -126,7 +128,7 @@
       <PreprocessorDefinitions>_DEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <LibraryDependencies>mysqlclient;</LibraryDependencies>
+      <LibraryDependencies>mysqlclient;crypto;</LibraryDependencies>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
