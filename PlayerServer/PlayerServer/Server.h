@@ -55,6 +55,7 @@ protected:
 	CFunctionBase* m_recvcallback;
 };
 
+/*网络服务器主进程， 处理连接业务*/
 class CServer
 {
 public:

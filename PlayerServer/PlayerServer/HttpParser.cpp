@@ -64,7 +64,7 @@ size_t CHttpParser::Parser(const Buffer& data)
 {
 	m_complete = false;
 	/*开始解析*/
-	/*m_parser里面含有CHttpParser对象，解析后的数据放在这里              要解析的url */
+	/*m_parser里面含有CHttpParser对象，解析后method的数据放在这里           要解析的url */
 	size_t ret = http_parser_execute(&m_parser, &m_settings/*回调函数*/, data, data.size());
 	if (m_complete == false) {
 		m_parser.http_errno = 0x7F;
@@ -114,6 +114,7 @@ int CHttpParser::OnMessageBegin()
 
 int CHttpParser::OnUrl(const char* at, size_t length)
 {
+	/*通过回调函数将剩余的解析结果存放在CHttpParser成员变量中*/
 	m_url = Buffer(at, length);
 	return 0;
 }

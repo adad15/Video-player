@@ -74,6 +74,7 @@ int CServer::ThreadFunc()
 						ret = m_server->Link(&pClient);
 						if(ret!=0)continue;
 						/*给子进程发送客户端文件描述符，服务端子进程BusinessProcess函数进行处理*/
+						/*进程间通信*/
 						ret = m_process.SendSocket(*pClient, *pClient/*类型转换operator sockaddr_in* ()*/);
 						delete pClient;
 						if (ret != 0) {

@@ -67,7 +67,7 @@ public:
 	virtual Buffer Insert(const _Table_& values);
 	virtual Buffer Delete(const _Table_& values);
 	virtual Buffer Modify(const _Table_& values);
-	virtual Buffer Query();
+	virtual Buffer Query(const Buffer& condition = "");
 	//创建一个基于表的对象
 	virtual PTable Copy()const;
 	virtual void ClearFieldUsed();
@@ -100,13 +100,6 @@ public:
 	virtual operator const Buffer() const;
 private:
 	Buffer Str2Hex(const Buffer& data) const;
-	union {
-		bool Bool;
-		int Integer;/*整数*/
-		double Double;
-		Buffer* String;/*联合体不会调用构造，所以这里使用指针*/
-	}Value;
-	int nType;
 };
 
 /*使用宏定义来简化数据库表的创建*/

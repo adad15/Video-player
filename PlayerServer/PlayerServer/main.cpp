@@ -93,7 +93,7 @@ int oldtest() {
 	return 0;
 }
 
-int oldtest1() {
+int Main() {
 	int ret{};
 	CProcess proclog;
 	ret = proclog.SetEntryFunction(CreatLogServer, &proclog);

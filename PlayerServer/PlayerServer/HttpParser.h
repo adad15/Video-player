@@ -6,9 +6,11 @@
 class CHttpParser
 {
 private:
+	/*存放的是http_parser_execute函数返回的方法*/
 	http_parser m_parser;/*头部的数据*/
-	http_parser_settings m_settings;
+	http_parser_settings m_settings;/*回调函数*/
 	std::map<Buffer, Buffer> m_HeaderValues;
+	/*存放的是通过回调函数得到的http的其余信息*/
 	Buffer m_status;
 	Buffer m_url;
 	Buffer m_body;
@@ -60,6 +62,7 @@ public:
 	Buffer Host()const { return m_host; }
 	int Port()const { return m_port; }/*默认返回80*/
 	void SetUrl(const Buffer& url);/*修改url*/
+	const Buffer Uri()const { return m_uri; }
 private:
 	Buffer m_url;/*原始的url*/
 	Buffer m_protocol;/*协议*/

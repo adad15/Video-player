@@ -5,6 +5,11 @@ G:\Video player Linux\Video-player\PlayerServer\PlayerServer\DataBaseHelper.cpp|
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Epoll.cpp|/root/projects/PlayerServer/Epoll.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\HttpParser.cpp|/root/projects/PlayerServer/HttpParser.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\http_parser.c|/root/projects/PlayerServer/http_parser.c
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\json_reader.cpp|/root/projects/PlayerServer/jsoncpp/json_reader.cpp
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp|/root/projects/PlayerServer/jsoncpp
+@G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp|@/root/projects/PlayerServer/jsoncpp
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\json_value.cpp|/root/projects/PlayerServer/jsoncpp/json_value.cpp
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\json_writer.cpp|/root/projects/PlayerServer/jsoncpp/json_writer.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Logger.cpp|/root/projects/PlayerServer/Logger.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp|/root/projects/PlayerServer/main.cpp
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\MysqlClient.cpp|/root/projects/PlayerServer/MysqlClient.cpp
@@ -18,6 +23,17 @@ G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Crypto.h|/root/proj
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\DataBaseHelper.h|/root/projects/PlayerServer/DataBaseHelper.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\HttpParser.h|/root/projects/PlayerServer/HttpParser.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\http_parser.h|/root/projects/PlayerServer/http_parser.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\allocator.h|/root/projects/PlayerServer/jsoncpp/allocator.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\assertions.h|/root/projects/PlayerServer/jsoncpp/assertions.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\config.h|/root/projects/PlayerServer/jsoncpp/config.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\forwards.h|/root/projects/PlayerServer/jsoncpp/forwards.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\json.h|/root/projects/PlayerServer/jsoncpp/json.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\json_features.h|/root/projects/PlayerServer/jsoncpp/json_features.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\json_tool.h|/root/projects/PlayerServer/jsoncpp/json_tool.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\reader.h|/root/projects/PlayerServer/jsoncpp/reader.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\value.h|/root/projects/PlayerServer/jsoncpp/value.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\version.h|/root/projects/PlayerServer/jsoncpp/version.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\writer.h|/root/projects/PlayerServer/jsoncpp/writer.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Logger.h|/root/projects/PlayerServer/Logger.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\MyPlayerServer.h|/root/projects/PlayerServer/MyPlayerServer.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\MysqlClient.h|/root/projects/PlayerServer/MysqlClient.h
@@ -32,4 +48,5 @@ G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.h|/
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3ext.h|/root/projects/PlayerServer/sqlite3/sqlite3ext.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Thread.h|/root/projects/PlayerServer/Thread.h
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\ThreadPool.h|/root/projects/PlayerServer/ThreadPool.h
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\json_valueiterator.inl|/root/projects/PlayerServer/jsoncpp/json_valueiterator.inl
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\|/root/projects/PlayerServer/

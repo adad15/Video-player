@@ -3,6 +3,9 @@ G:\Video player Linux\Video-player\PlayerServer\PlayerServer\DataBaseHelper.cpp;
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Epoll.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\Epoll.o
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\HttpParser.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\HttpParser.o
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\http_parser.c;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\http_parser.o
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\json_reader.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\json_reader.o
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\json_value.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\json_value.o
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\jsoncpp\json_writer.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\json_writer.o
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Logger.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\Logger.o
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\main.o
 G:\Video player Linux\Video-player\PlayerServer\PlayerServer\MysqlClient.cpp;G:\Video player Linux\Video-player\PlayerServer\PlayerServer\obj\x64\Debug\MysqlClient.o

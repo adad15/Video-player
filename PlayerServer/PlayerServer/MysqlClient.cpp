@@ -10,7 +10,8 @@ int CMysqlClient::Connect(const KeyValue& args)
 		return -2;
 	ret = mysql_real_connect(&m_db, args.at("host"), args.at("user"), args.at("password"), args.at("db"), atoi(args.at("port")), NULL, 0);
 	if ((ret == NULL) && (mysql_errno(&m_db) != 0)) {
-		printf("%s %d\n", __FUNCTION__, mysql_errno(&m_db));
+		printf("%s %d %s\n", __FUNCTION__, mysql_errno(&m_db), mysql_error(&m_db));
+		TRACEE("%d %s", mysql_errno(&m_db), mysql_error(&m_db));
 		mysql_close(&m_db);
 		bzero(&m_db, sizeof(m_db));
 		return -3;
@@ -24,7 +25,8 @@ int CMysqlClient::Exec(const Buffer& sql)
 	if (!m_isInit)return -1;
 	int ret = mysql_real_query(&m_db, sql, sql.size());
 	if (ret != 0) {
-		printf("%s %s\n", __FUNCTION__, mysql_errno(&m_db));
+		printf("%s %d %s\n", __FUNCTION__, mysql_errno(&m_db), mysql_error(&m_db));
+		TRACEE("%d %s", mysql_errno(&m_db), mysql_error(&m_db));
 		return -2;
 	}
 	return 0;
@@ -36,7 +38,8 @@ int CMysqlClient::Exec(const Buffer& sql, Result& result, const _Table_& table)
 	if (!m_isInit)return -1;
 	int ret = mysql_real_query(&m_db, sql, sql.size());
 	if (ret != 0) {
-		printf("%s %s\n", __FUNCTION__, mysql_errno(&m_db));
+		printf("%s %d %s\n", __FUNCTION__, mysql_errno(&m_db), mysql_error(&m_db));
+		TRACEE("%d %s", mysql_errno(&m_db), mysql_error(&m_db));
 		return -2;
 	}
 
@@ -63,7 +66,8 @@ int CMysqlClient::StartTransaction()
 	if (!m_isInit)return -1;
 	int ret = mysql_real_query(&m_db, "BEGIN", 6/*ด๓ะก5+1*/);
 	if (ret != 0) {
-		printf("%s %s\n", __FUNCTION__, mysql_errno(&m_db));
+		printf("%s %d %s\n", __FUNCTION__, mysql_errno(&m_db), mysql_error(&m_db));
+		TRACEE("%d %s", mysql_errno(&m_db), mysql_error(&m_db));
 		return -2;
 	}
 	return 0;
@@ -74,7 +78,8 @@ int CMysqlClient::CommitTransaction()
 	if (!m_isInit)return -1;
 	int ret = mysql_real_query(&m_db, "COMMIT", 7);
 	if (ret != 0) {
-		printf("%s %s\n", __FUNCTION__, mysql_errno(&m_db));
+		printf("%s %d %s\n", __FUNCTION__, mysql_errno(&m_db), mysql_error(&m_db));
+		TRACEE("%d %s", mysql_errno(&m_db), mysql_error(&m_db));
 		return -2;
 	}
 	return 0;
@@ -85,7 +90,8 @@ int CMysqlClient::RollbackTransaction()
 	if (!m_isInit)return -1;
 	int ret = mysql_real_query(&m_db, "ROLLBACK", 9);
 	if (ret != 0) {
-		printf("%s %s\n", __FUNCTION__, mysql_errno(&m_db));
+		printf("%s %d %s\n", __FUNCTION__, mysql_errno(&m_db), mysql_error(&m_db));
+		TRACEE("%d %s", mysql_errno(&m_db), mysql_error(&m_db));
 		return -2;
 	}
 	return 0;
@@ -216,7 +222,7 @@ Buffer _mysql_table_::Modify(const _Table_& values)
 	return sql;
 }
 
-Buffer _mysql_table_::Query()
+Buffer _mysql_table_::Query(const Buffer& condition)
 {
 	Buffer sql = "SELECT ";
 	for (size_t i = 0; i < FieldDefine.size(); i++)
@@ -224,7 +230,11 @@ Buffer _mysql_table_::Query()
 		if (i > 0)sql += ',';
 		sql += '`' + FieldDefine[i]->Name + "`";
 	}
-	sql += " FROM " + (Buffer)*this + ";";
+	sql += " FROM " + (Buffer)*this + " ";
+	if (condition.size() > 0) {
+		sql += " WHERE " + condition;
+	}
+	sql += ";";
 	printf("sql = %s\n", (char*)sql);
 	return sql;
 }

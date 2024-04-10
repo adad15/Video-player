@@ -91,6 +91,9 @@
       <CAdditionalWarning Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </CAdditionalWarning>
     </ClCompile>
+    <ClCompile Include="jsoncpp\json_reader.cpp" />
+    <ClCompile Include="jsoncpp\json_value.cpp" />
+    <ClCompile Include="jsoncpp\json_writer.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MysqlClient.cpp" />
@@ -108,6 +111,17 @@
     <ClInclude Include="DataBaseHelper.h" />
     <ClInclude Include="HttpParser.h" />
     <ClInclude Include="http_parser.h" />
+    <ClInclude Include="jsoncpp\allocator.h" />
+    <ClInclude Include="jsoncpp\assertions.h" />
+    <ClInclude Include="jsoncpp\config.h" />
+    <ClInclude Include="jsoncpp\forwards.h" />
+    <ClInclude Include="jsoncpp\json.h" />
+    <ClInclude Include="jsoncpp\json_features.h" />
+    <ClInclude Include="jsoncpp\json_tool.h" />
+    <ClInclude Include="jsoncpp\reader.h" />
+    <ClInclude Include="jsoncpp\value.h" />
+    <ClInclude Include="jsoncpp\version.h" />
+    <ClInclude Include="jsoncpp\writer.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MyPlayerServer.h" />
     <ClInclude Include="MysqlClient.h" />
@@ -122,6 +136,9 @@
     <ClInclude Include="sqlite3\sqlite3ext.h" />
     <ClInclude Include="Thread.h" />
     <ClInclude Include="ThreadPool.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="jsoncpp\json_valueiterator.inl" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
