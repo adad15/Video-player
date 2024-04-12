@@ -9,6 +9,50 @@
 #include <sstream>
 #include <sys/stat.h>
 
+/*mapClients有什么用？？？？？？？？？？？？？？？？*/
+
+/*
+ * 进程间通信：
+ * 1.Process.h： socketpair 绑定本地socket和管道 + sendmsg/recvmsg 发送消息 msg
+ * 2.Socket.h：  本地套接字 write + read
+ *
+*/
+
+/*
+ * 日志服务器：只有一个线程，主线程进行控制，子线程进行处理
+ * 
+ * LogInfo类：
+ * 1.重载了<<运算符
+ * 2.主要是为存放日志
+ * 
+ * CLoggerServer类：
+ * 1.构造函数：
+ *		注册线程工作函数m_thread + 获取路径用来存放工作日志
+ * 2.Start 成员函数 =》 日志服务器主进程调用，为主线程：
+ *		这个函数主要是进行连接等控制操作
+ *		创建日志文件 + 创建epoll(1个接口) + Init 初始化客户端本地套接字(socket+bind+listen) =》 ./log/server.sock 进程通信链接文件
+ + 将服务器加入epoll 
+ + 启动线程函数m_thread（设置信号集 + 注册信号回调函数 + 等待信号，非阻塞 + 运行线程工作函数ThreadFunc）
+ * 
+ * 3.ThreadFunc 子线程工作函数：
+ *		创建事件队列 + 建立文件描述符和套接字的映射表mapClients + 循环处理事件
+ *	循环调用WaitEvent + 遍历WaitEvent返回的有相应的事件：
+ *		服务器收到输入请求：(服务器accept和客户端建立连接 + 利用accept返回信息创建客户端套接字) + 将新连接的客户端加入红黑树
+ *			+ 如果映射表已经存放该客户端将该客户端从映射表中删除  + 将新连接的客户端加入到映射表mapClients
+ *		客户端有输入请求：利用epoll返回的events[i].data.ptr创建客户端套接字 + Recv 得到其他进程调用Trace发送的日志 + 调用WriteLog将信息写入到本地日志文件
+ *		
+ * 4.WriteLog 成员函数：
+ *		将其他进程通过本地套接字传入的信息写入到本地日志文件
+ * 5.Trace 静态函数：
+ *		给其他进程提供的接口 =》 通过thread_local给每个线程分配客户端套接字 =》 Init 初始化客户端套接字，./log/server.sock 进程通信链接文件
+ *		=》 Link connect 客户端 =》 其余线程调用Send函数给日志处理子线程发送日志信息
+ * 6.Close 成员函数：=》 日志服务器主进程中的子进程调用Close函数
+ *		关闭m_server
+ *		关闭m_epoll
+ *		关闭m_thread
+ * 
+*/
+
 enum {
 	LOG_INFO,/*普通信息*/
 	LOG_DEBUG,/*调试*/
@@ -152,7 +196,7 @@ private:
 		printf("%s(%d):[%s] %d\n", __FILE__, __LINE__, __FUNCTION__, (int)m_epoll);
 		printf("%s(%d):[%s] %p\n", __FILE__, __LINE__, __FUNCTION__, m_server);
 		EPEvents events;
-		std::map<int, CSocketBase*> mapClients;/*套接字描述符和套接字的映射表，储存起来 和链表相比可以随意释放*/
+		std::map<int, CSocketBase*> mapClients;/*文件描述符和套接字的映射表，储存起来 和链表相比可以随意释放*/
 		/*      线程是否有效             是否关闭     本地套接字是否有效*/
 		while (m_thread.isValid() && (m_epoll != -1) && (m_server != NULL))
 		{
@@ -170,7 +214,7 @@ private:
 						/*有输入*/
 						if (events[i].data.ptr == m_server) {/*服务器收到输入请求,表明有连接*/
 							CSocketBase* pClient = NULL;
-							int r = m_server->Link(&pClient);
+							int r = m_server->Link(&pClient);/*服务器accept + 利用accept返回信息创建客户端套接字*/
 							printf("%s(%d):[%s] r=%d\n", __FILE__, __LINE__, __FUNCTION__, r);
 							if (r < 0) continue;
 							/*将新连接的客户端加入红黑树*/

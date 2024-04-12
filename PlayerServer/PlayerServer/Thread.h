@@ -8,6 +8,41 @@
 #include <map>
 #include <errno.h>
 
+/*
+ * 接口：线程工作函数
+ *
+*/
+
+/*
+ * 静态成员m_mapThread： 线程id与线程CThread类的映射
+ * 
+ * CThread类：
+ * 
+ * 1.这个类封装了单个线程
+ * 2.构造函数：
+ *		默认构造函数：置空变量
+ *		模板构造函数：new CFunction设置线程工作函数，将参数和线程函数绑定
+ * 3.SetThreadFunc成员函数：
+ *		new CFunction设置线程工作函数，将参数和线程函数绑定
+ * 4.Start 成员函数：
+ *		封装pthread_create函数，线程函数必须为静态成员函数，因为类的非静态成员函数只能通过类的对象去调用，
+但是创建线程时从哪里能获得类的对象而去调用类的成员函数呢? 所以线程函数必须为静态。
+ *		静态函数没有CThread对象的this指针，所以第四个参数是this指针，将CThread对象指针传给线程函数
+ *		线程函数的本质就是回调函数
+ *		将线程id与线程类的映射加入静态映射表
+ * 5.Pause 成员函数
+ *		封装pthread_kill函数，发送自定义SIGUSR1信号，该线程进入到信号响应函数
+ * 6.Stop 成员函数
+ *		封装pthread_detach函数，销毁子线程 + pthread_kill，发送自定义信号SIGUSR2
+ * 7.ThreadEntry线程函数
+ *		通过传入的this指针，调用真正的线程成员函数
+ *		设置信号集 + 注册信号回调函数 + 等待SIGUSR1、SIGUSR2信号 + 从静态映射表中删除映射
+ * 8.信号回调函数（静态）
+ *		因为是静态的，全局只有一个信号回调函数，所以需要之前定义的静态映射表拿到线程对象 + 进行信号处理
+ * 9.EnterThread真正的线程函数
+ *		调用线程工作函数（CFunctionBase类）
+*/
+
 class CThread {
 public:
 	CThread() {
@@ -16,6 +51,7 @@ public:
 		m_bpaused = false;
 	}
 
+	/*模板构造函数：new CFunction设置线程工作函数，将参数和线程函数绑定*/
 	template<typename _FUNCTION_,typename..._ARGS_>
 	CThread(_FUNCTION_ func, _ARGS_...args) :
 		m_function(new CFunction<_FUNCTION_, _ARGS_...>(func, args...)) 
@@ -28,7 +64,7 @@ public:
 	CThread(const CThread&) = delete;
 	CThread& operator=(const CThread&) = delete;
 public:
-	/*设置线程函数*/
+	/*设置线程工作函数*/
 	template<typename _FUNCTION_, typename..._ARGS_>
 	int SetThreadFunc(_FUNCTION_ func, _ARGS_...args) {
 		m_function = new CFunction<_FUNCTION_, _ARGS_...>(func, args...);
@@ -159,7 +195,7 @@ private:
 
 	}
 private:
-	CFunctionBase* m_function;/*线程函数*/
+	CFunctionBase* m_function;/*线程工作函数*/
 	pthread_t m_thread;
 	bool m_bpaused;/*true 表示暂停 false 表示运行中*/
 	static std::map<pthread_t, CThread*>m_mapThread;

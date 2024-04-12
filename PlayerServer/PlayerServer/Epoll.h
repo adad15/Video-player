@@ -7,7 +7,37 @@
 #include <memory.h>
 #include <cstdio>
 
+/*
+ *	
+ *                    1.日志服务器 =》 使用epoll调用本地socket实现进程间通信
+ * epoll 两大用处
+ *					  2.网络服务器 =》 使用epoll调用网络socket更好实现多线程通信，避免队列加锁导致效率下降
+ *
+*/
+
+/* 
+ * EpollDate类：
+ * 1.封装了epoll_data_t结构体，用来构造epoll_event结构体
+ * 2.epoll_data_t结构体里面有
+ *		u64、u32、fd、ptr
+ * 3.利用operator 转换函数对EpollDate类实现转换
+ * 
+ * EPEvents：利用vector容器维护epoll中发生的事件
+ * 
+ * CEpoll类：
+ * 1.封装了epoll，删除了拷贝构造函数和赋值重载函数
+ * 2.利用operator 转换函数对CEpoll类实现转换返回m_epoll
+ * 3.Create 成员函数：
+ *      封装epoll_create，创建epoll
+ * 4.WaitEvent 成员函数：
+ *      封装epoll_wait等待事件函数，返回发生的事件数组
+ * 5.Add、Modify、Del 成员函数：
+ *		封装epoll_ctl处理事件函数，并且拼装epoll_event
+ * 
+*/		
+
 #define EVENT_SIZE 128
+using EPEvents = std::vector<epoll_event>;
 
 class EpollDate {
 public:
@@ -48,8 +78,6 @@ private:
 	epoll_data_t m_data;
 };
 
-using EPEvents = std::vector<epoll_event>;
-
 class CEpoll
 {
 public:
@@ -75,6 +103,7 @@ public:
 	ssize_t WaitEvent(EPEvents& events, int timeout = 10) {
 		if (m_epoll == -1) return -1;
 		EPEvents evs(EVENT_SIZE);
+		/*evs 队列存放发生的事件*/
 		int ret = epoll_wait(m_epoll, evs.data(), (int)evs.size(), timeout);
 		if (ret == -1) {
 			if ((errno == EINTR) || (errno == EAGAIN)) {
@@ -86,7 +115,7 @@ public:
 			events.resize(ret);
 		}
 		/*把得到的信息作为输出参数传出去*/
-		memcpy(events.data(), evs.data(), sizeof(epoll_event) * ret);
+		memcpy(events.data(), evs.data(), sizeof(epoll_event) * ret);/*它返回内置vecotr所指的数组内存的第一个元素的指针。*/
 		return ret;
 	}
 	/*添加事件*/

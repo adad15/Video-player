@@ -18,10 +18,10 @@ int CreatLogServer(CProcess* proc) {
     }
     int fd = 0;
     while(true){
-        printf("%s(%d):<%s> fd=%d\n", __FILE__, __LINE__, __FUNCTION__, fd);
+        /*printf("%s(%d):<%s> fd=%d\n", __FILE__, __LINE__, __FUNCTION__, fd);*/
         /*等待主进程的信号*/
         ret = proc->RecvFD(fd);
-        printf("%s(%d):<%s> fd=%d\n", __FILE__, __LINE__, __FUNCTION__, fd);
+        /*printf("%s(%d):<%s> fd=%d\n", __FILE__, __LINE__, __FUNCTION__, fd);*/
         if (fd <= 0)break;
     }
     ret = server.Close();
@@ -105,9 +105,8 @@ int Main() {
 	ret = server.Init(&business);
 	ERR_RETURN(ret, -3);
 	ret = server.Run();
+	printf("%s(%d):<%s>\n", __FILE__, __LINE__, __FUNCTION__);
 	ERR_RETURN(ret, -4);
-
-
 	return 0;
 }
 
@@ -294,9 +293,7 @@ int crypto_test() {
 int main()
 {
 	int ret = 0;
-	ret = crypto_test();
-	printf("ret = %d\n", ret);
+	ret = Main();
+	printf("Main:ret = %d\n", ret);
 	return ret;
 }
-
-

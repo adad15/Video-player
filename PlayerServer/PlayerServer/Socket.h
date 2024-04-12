@@ -7,6 +7,34 @@
 #include "Public.h"
 #include <fcntl.h>
 
+/*
+ * SockAttr枚举
+ * 
+ * CSockParam类：
+ * 1.封装了网络套接字和本地套接字的地址、端口、ip、参数
+ * 2.构造函数 =》 为网络套接字和本地套接字初始化，赋值
+ * 3.转换函数 =》 sockaddr_in转换成sockaddr
+ * 
+ * CSocketBase抽象类：
+ * 1.本类的作用是实现多态
+ * 2.Close()成员函数：关闭服务器的本地套接字（删除进程间的链接文件）和网络套接字
+ * 3.其余成员函数都是纯虚函数
+ * 
+ * CSocket类：
+ * 1.封装了网络套接字和本地套接字
+ * 2.Init 成员函数：
+ *		传入的参数是赋值好的套接字
+ *		封装了客户端和服务器网络套接字和本地套接字的
+ *		服务器： socket + bind + listen
+ *		客户端： socket
+ * 3.Link 成员函数：
+ *		服务器：accept + 利用accept得到的客户端信息，调用Init创建客户端套接字
+ *		客户端：connect
+ * 4.Send/Recv 成员函数：
+ *		封装了read和write函数
+ * 
+*/
+
 enum SockAttr {
 	SOCK_ISSERVER = 1,/*是否为服务器  1表示是  0表示客户端*/
 	SOCK_ISNONBLOCK = 2,/*是否阻塞  1表示非阻塞  0表示阻塞*/
@@ -28,7 +56,7 @@ public:
 		this->port = port;
 		this->attr = attr;
 		addr_in.sin_family = AF_INET;
-		addr_in.sin_port = port;
+		addr_in.sin_port = htons(port);/*host 主机 net网络  shor  主机字节序转为网络字节序*/
 		addr_in.sin_addr.s_addr = inet_addr(ip);/*调用operator const char* ()const*/
 	}
 	CSockParam(const sockaddr_in* addrin, int arrt) {
@@ -177,7 +205,7 @@ public:
 		int ret{};
 		if (m_param.attr & SOCK_ISSERVER) {
 			if (pClient == NULL) return -2;
-			CSockParam param;
+			CSockParam param;/*存放客户端套接字信息*/
 			int fd = -1;
 			socklen_t len = 0;
 			if (m_param.attr & SOCK_ISIP) {
@@ -190,8 +218,10 @@ public:
 				fd = accept(m_socket, param.addrun(), &len);
 			}
 			if (fd == -1)return -3;
+			/*创建客户端套接字*/
 			*pClient = new CSocket(fd);
 			if (*pClient == NULL) return -4;
+			/*利用accept得到的客户端套接字信息创建客户端套接字*/
 			ret = (*pClient)->Init(param);/*本地套接字  这里也需要客户端初始化*/
 			if (ret != 0) {
 				delete(*pClient);

@@ -6,6 +6,34 @@
 #include <fcntl.h>
 #include <signal.h>
 
+/*
+ * CProcess类：
+ * 
+ * 这个类的主要目的是：
+ * 1.进程类，这个类主要是创建进程，调用进程函数
+ * 2.成员方法实现将 套接字fd 发送给其他进程
+ * 
+ * SetEntryFunction成员函数：
+ * 1.设置进程入口函数
+ * 2.利用可变参数函数模板，来实现不同进程可以将不同参数传入到这个类里面
+ * 
+ * CreatSubProcess成员函数：
+ * 1.创建子进程，并运行子进程函数
+ * 2.利用socketpair实现进程间通信 =》 管道 + socketpair（设置本地套接字）+ sendmsg/recvmsg
+ * 3.fork()创建子进程 =》 关闭写管道 =》 启动进程入口函数
+ *			   主进程 =》 关闭读管道 =》 继续执行下面的函数
+ * 
+ * SendFD/RecvFD成员函数：
+ * 1.封装sendmsg/recvmsg 函数，将套接字fd 发送给别的进程
+ * 
+ * SendSocket/RecvSocket成员函数：
+ * 1.封装sendmsg/recvmsg 函数，将网络套接字地址信息发送给别的进程
+ * 
+ * SwitchDeamon：
+ * 1.创建守护进程
+*/
+
+/*进程类*/
 class CProcess {
 public:
 	CProcess() {
@@ -107,14 +135,14 @@ public:
 		msg.msg_controllen = cmsg->cmsg_len;
 
 		ssize_t ret = recvmsg(pipes[0], &msg, 0);
- 		printf("%s(%d):<%s> pid=%d errno:%d msg:%s\n",
- 			__FILE__, __LINE__, __FUNCTION__, getpid(), errno, strerror(errno));
+//  		printf("%s(%d):<%s> pid=%d errno:%d msg:%s\n",
+//  			__FILE__, __LINE__, __FUNCTION__, getpid(), errno, strerror(errno));
 		if (ret == -1) {
 			delete cmsg;
 			return -2;
 		}
 		fd = *(int*)CMSG_DATA(cmsg);
-		printf("%s(%d):<%s> fd=%d\n", __FILE__, __LINE__, __FUNCTION__, fd);
+		/*printf("%s(%d):<%s> fd=%d\n", __FILE__, __LINE__, __FUNCTION__, fd);*/
 		delete cmsg;
 		return 0;
 	}
@@ -134,7 +162,6 @@ public:
 		msg.msg_iov = iov;
 		msg.msg_iovlen = 2;
 
-		/*实际要传输的数据(文件描述符)*/
 		cmsghdr* cmsg = new cmsghdr;
 		bzero(cmsg, sizeof(cmsghdr));
 		if (cmsg == NULL) return -1;
