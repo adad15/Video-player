@@ -6,24 +6,40 @@
 #include "Socket.h"
 
 /*
+ * 
+ * 接口：AddTask 不定参数的函数模板
+ * 
  * std::vector<CThread*> m_threads;
  * 通过vector容器维护线程队列
  * 
  * 线程间通信：自定义信号 来控制线程的休眠与关闭
+ * 
+ * 线程池就相当于服务端，各个线程就相当于客户端
+ * 
+ * 分层结构：
+ * 线程接口函数（线程类） =》线程工作函数（线程池类） =》实际工作处理函数（main，最外层）
+ * 
  */
 
 /*
  * CThreadPool线程池类：
  * 1.构造函数：
- *		创建进程间通信的连接文件.sock文件
+ *		创建进程间通信的连接文件.sock文件（m_path）
  * 2.Start 成员函数：
  *		创建本地套接字 + Init 通过.sock文件建立服务器的本地套接字连接 + 创建epoll，并将服务器套接字加入到epoll红黑树中
- *		+ 将TaskDispatch函数设置为每个线程的工作函数 + 启动线程（设置信号，运行线程工作函数TaskDispatch）
+ *		+ 将 TaskDispatch 函数设置为每个线程的工作函数 + 启动线程（设置信号，运行线程工作函数 TaskDispatch）
  * 3.TaskDispatch 成员函数：
  *											服务端服务器收到输入请求：服务器 Link 得到新连接的客户端 + 将新连接的客户端加入到epoll
  *		封装了 WaitEvent 函数，进入循环  
- *											客户端服务器收到输入请求：events[i].data.ptr得到有事件相应的客户端 + 
- * 
+ *											客户端服务器收到输入请求：events[i].data.ptr得到有事件相应的客户端 + 调用pClient的Recv得到线程工作函数
+ *											+ 运行传入的线程工作函数
+ * 4.AddTask 函数模板：=》 线程池得到最外层实际的处理函数函数
+ *		通过 thread_local 每个线程得到不同客户端socket + Init + Link + 将得到的实际处理函数指针发送给 TaskDispatch 成员函数
+ * 5.Close 成员函数：
+ *		m_epoll关闭
+ *		关闭线程池里的每一个thread
+ *		清空线程队列
+ *		关闭连接文件m_path
  * 
 */
 
@@ -133,6 +149,16 @@ private:
 								CFunctionBase* base = NULL;
 								Buffer data(sizeof(base));
 								ret = pClient->Recv(data);
+								if (ret <= 0) {
+									m_epoll.Del(*pClient);
+									delete pClient;
+									continue;
+								}
+								memcpy(&base, (char*)data, sizeof(base));
+								if (base != NULL) {
+									(*base)();/*调用运行实际处理函数*/
+									delete base;
+								}
 							}
 						}
 					}

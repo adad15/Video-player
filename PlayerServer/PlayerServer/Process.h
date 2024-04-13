@@ -150,17 +150,17 @@ public:
 	int SendSocket(int fd, const sockaddr_in* addrin) {
 		struct msghdr msg;
 		/*没有实际用途*/
-		struct iovec iov[2];
-		char buf[2][10] = { "edoyun","jueding" };
-		iov[0].iov_base = (void*)addrin;
-		iov[0].iov_len = sizeof(sockaddr_in);
-		iov[1].iov_base = buf[1];
-		iov[1].iov_len = sizeof(buf[1]);
+		struct iovec iov;
+		bzero(&msg, sizeof(msg));
+		char buf[20] = "";
+		memcpy(buf, addrin, sizeof(addrin));
+		iov.iov_base = buf;
+		iov.iov_len = sizeof(buf);
 		/*大坑！！！ 这个必须要有*/
 		msg.msg_name = NULL;
 		msg.msg_namelen = 0;
-		msg.msg_iov = iov;
-		msg.msg_iovlen = 2;
+		msg.msg_iov = &iov;
+		msg.msg_iovlen = 1;
 
 		cmsghdr* cmsg = new cmsghdr;
 		bzero(cmsg, sizeof(cmsghdr));
@@ -186,16 +186,15 @@ public:
 
 	int RecvSocket(int& fd, sockaddr_in* addrin) {/*返回值表状态，输出参数用来传递修改后参数*/
 		msghdr msg;
-		iovec iov[2];
-		char buf[][10] = { "","" };
-		iov[0].iov_base = addrin;
-		iov[0].iov_len = sizeof(sockaddr_in);
-		iov[1].iov_base = buf[1];
-		iov[1].iov_len = sizeof(buf[1]);
+		iovec iov;
+		bzero(&msg, sizeof(msg));
+		char buf[20] = "";
+		iov.iov_base = buf;
+		iov.iov_len = sizeof(buf);
 		msg.msg_name = NULL;
 		msg.msg_namelen = 0;
-		msg.msg_iov = iov;
-		msg.msg_iovlen = 2;
+		msg.msg_iov = &iov;
+		msg.msg_iovlen = 1;
 
 		cmsghdr* cmsg = new cmsghdr;
 		bzero(cmsg, sizeof(cmsghdr));
@@ -213,6 +212,7 @@ public:
 			delete cmsg;
 			return -2;
 		}
+		memcpy(addrin, buf, sizeof(sockaddr_in));
 		fd = *(int*)CMSG_DATA(cmsg);
 		printf("%s(%d):<%s> fd=%d\n", __FILE__, __LINE__, __FUNCTION__, fd);
 		delete cmsg;

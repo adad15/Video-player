@@ -4,35 +4,9 @@
   正在验证体系结构
   正在启动远程生成
   正在编译源:
-  Crypto.cpp
-  DataBaseHelper.cpp
-  Epoll.cpp
-  HttpParser.cpp
-  http_parser.c
-  json_reader.cpp
-  json_value.cpp
-  json_writer.cpp
-  Logger.cpp
-  main.cpp
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(35,9): warning : unused variable ‘ret’ [-Wunused-variable]
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(35,9): warning :    35 |     int ret = proc->RecvFD(fd);
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\main.cpp(35,9): warning :       |         ^~~
-  MysqlClient.cpp
   Server.cpp
-  Sqlite3Client.cpp
-  sqlite3.c
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c(113122,3): warning : this ‘if’ clause does not guard... [-Wmisleading-indentation]
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c(113122,3): warning : 113122 |   if( pIdx->pPartIdxWhere!=0 ) a[0] -= 10;  assert( 10==sqlite3LogEst(2) );
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c(113122,3): warning :        |   ^~
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c(113122,45): message : ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c(113122,45): message : 113122 |   if( pIdx->pPartIdxWhere!=0 ) a[0] -= 10;  assert( 10==sqlite3LogEst(2) );
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c(113122,45): message :        |                                             ^~~~~~
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c(113123,3): warning : this ‘if’ clause does not guard... [-Wmisleading-indentation]
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c(113123,3): warning : 113123 |   if( a[0]<33 ) a[0] = 33;                  assert( 33==sqlite3LogEst(10) );
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c(113123,3): warning :        |   ^~
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c(113123,45): message : ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c(113123,45): message : 113123 |   if( a[0]<33 ) a[0] = 33;                  assert( 33==sqlite3LogEst(10) );
-G:\Video player Linux\Video-player\PlayerServer\PlayerServer\sqlite3\sqlite3.c(113123,45): message :        |                                             ^~~~~~
-  Thread.cpp
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Process.h(156,37): warning : argument to ‘sizeof’ in ‘void* memcpy(void*, const void*, size_t)’ call is the same expression as the source; did you mean to dereference it? [-Wsizeof-pointer-memaccess]
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Process.h(156,37): warning :   156 |                 memcpy(buf, addrin, sizeof(addrin));
+G:\Video player Linux\Video-player\PlayerServer\PlayerServer\Process.h(156,37): warning :       |                                     ^~~~~~~~~~~~~~
   正在链接对象
   PlayerServer.vcxproj -> G:\Video player Linux\Video-player\PlayerServer\PlayerServer\bin\x64\Debug\PlayerServer.out

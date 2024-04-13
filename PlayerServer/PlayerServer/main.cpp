@@ -104,9 +104,10 @@ int Main() {
 	CServer server;
 	ret = server.Init(&business);
 	ERR_RETURN(ret, -3);
-	ret = server.Run();
+	ret = server.Run();/*无限等待*/
 	printf("%s(%d):<%s>\n", __FILE__, __LINE__, __FUNCTION__);
 	ERR_RETURN(ret, -4);
+
 	return 0;
 }
 

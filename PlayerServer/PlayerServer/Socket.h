@@ -40,6 +40,7 @@ enum SockAttr {
 	SOCK_ISNONBLOCK = 2,/*是否阻塞  1表示非阻塞  0表示阻塞*/
 	SOCK_ISUDP = 4,/*是否为udp  1表示udp  0表示tcp*/
 	SOCK_ISIP = 8,/*是否为ip协议  1表示ip协议  0表示本地套接字*/
+	SOCK_ISREUSE = 16, /*是否重用地址*/
 };
 /*套接字参数类*/
 class CSockParam {
@@ -54,7 +55,7 @@ public:
 	CSockParam(const Buffer& ip, short port, int arrt) {
 		this->ip = ip;
 		this->port = port;
-		this->attr = attr;
+		this->attr = arrt;
 		addr_in.sin_family = AF_INET;
 		addr_in.sin_port = htons(port);/*host 主机 net网络  shor  主机字节序转为网络字节序*/
 		addr_in.sin_addr.s_addr = inet_addr(ip);/*调用operator const char* ()const*/
@@ -62,7 +63,7 @@ public:
 	CSockParam(const sockaddr_in* addrin, int arrt) {
 		this->ip = ip;
 		this->port = port;
-		this->attr = attr;
+		this->attr = arrt;
 		memcpy(&addr_in, addrin, sizeof(addr_in));
 	}
 	/*本地套接字初始化  参数地址*/
@@ -177,22 +178,29 @@ public:
 			m_status = 2;/*accept 来的套接字，已经处于连接状态*/
 		if (m_socket == -1) return -2;
 		int ret = 0;
+		if (m_param.attr & SOCK_ISREUSE) {
+			int option = 1;
+			ret = setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+			if (ret == -1)return -3;
+		}
 		/*如果是服务器执行下面的代码，客户端不执行*/
 		if (m_param.attr & SOCK_ISSERVER) {
-			if (m_param.attr & SOCK_ISIP)
+			if (m_param.attr & SOCK_ISIP) {
 				ret = bind(m_socket, m_param.addrin(), sizeof(sockaddr_in));
+				printf("errno:%d msg:%s\n", errno, strerror(errno));
+			}
 			else
 				ret = bind(m_socket, m_param.addrun(), sizeof(sockaddr_un));
-			if (ret == -1) return -3;
-			ret = listen(m_socket, 32);
 			if (ret == -1) return -4;
+			ret = listen(m_socket, 32);
+			if (ret == -1) return -5;
 		}
 		if (m_param.attr & SOCK_ISNONBLOCK) {
 			int option = fcntl(m_socket, F_GETFL);
-			if (option == -1) return -5;
+			if (option == -1) return -6;
 			option |= O_NONBLOCK;
 			ret = fcntl(m_socket, F_SETFL, option);/*设置非阻塞*/
-			if (ret == -1) return -6;
+			if (ret == -1) return -7;
 		}
 		if (m_status == 0) {
 			m_status = 1;
@@ -257,11 +265,14 @@ public:
 	/*接收数据   大于零，表示接收成功  小于  表示失败  等于0  表示没有收到数据，但没有错误*/
 	virtual int Recv(Buffer& data) {
 		if (m_status < 2 || (m_socket == -1)) return -1;
+		data.resize(1024 * 1024);
 		ssize_t len = read(m_socket, data, data.size());
+		printf("errno:%d msg:%s\n", errno, strerror(errno));
 		if (len > 0) {
 			data.resize(len);
 			return (int)len;/*收到数据*/
 		}
+		data.clear();
 		if (len < 0) {
 			if (errno == EINTR || (errno == EAGAIN)) {
 				data.clear();

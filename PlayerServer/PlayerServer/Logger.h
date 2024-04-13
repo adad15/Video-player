@@ -126,7 +126,7 @@ public:
 			return -4;
 		}
 		/*SOCK_ISSERVER为什么只有一个参数？？？？？？？*/
-		ret = m_server->Init(CSockParam("./log/server.sock", (int)SOCK_ISSERVER));
+		ret = m_server->Init(CSockParam("./log/server.sock", (int)(SOCK_ISSERVER | SOCK_ISREUSE)));
 		if (ret != 0) {
 			Close();
 			return -5;

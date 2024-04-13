@@ -188,11 +188,11 @@ int UrlParser::Parser()
 	//½âÎöuri
 	target = strchr(pos, '?');
 	if (target == NULL) {
-		m_uri = pos;/*¿Õ*/
+		m_uri = pos + 1;/*¿Õ*/
 		return 0;
 	}
 	else {
-		m_uri = Buffer(pos, target);
+		m_uri = Buffer(pos + 1, target);
 		//½âÎökeyºÍvalue
 		pos = target + 1;
 		const char* t = NULL;

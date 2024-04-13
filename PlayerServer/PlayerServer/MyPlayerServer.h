@@ -38,9 +38,35 @@ DECLARE_MYSQL_FIELD(TYPE_INT, user_register_time, DEFAULT, "DATETIME", "", "LOCA
 DECLARE_TABLE_CLASS_END()
 
 /*
-* 1. 客户端的地址问题
-* 2. 连接回调的参数问题
-* 3. 接收回调的参数问题
+ * 1. 客户端的地址问题
+ * 2. 连接回调的参数问题
+ * 3. 接收回调的参数问题
+*/
+
+/*
+ * 第二个线程池在网络服务器子进程：用来处理客户端发送来的数据
+ * 第一个线程池在程序的主进程：用来将连接好的客户端信息发送给网络服务器子进程
+ * 
+*/
+
+/*
+ * CMyPlayerServer类：网络服务器子进程 工作进程
+ * 
+ * 1.BusinessProcess静态函数：网络服务器子进程接口函数
+ *		创建数据库对象 + 设置数据库基本信息，连接数据库 + 设置连接、接收回调函数 Connected Received + 创建epoll和线程池
+ *		+ 设置线程池中实际工作函数ThraedFunc + 进入死循环中
+ *		死循环工作逻辑：
+ *		调用RecvSocket接收主进程发送过来的客户端套接字的文件描述符 + 将接受到的客户端套接字初始化 + 将收到的客户端加入到epoll中
+ *		+ 调用连接回调函数
+ * 
+ * 2.Connected 回调函数：没有什么特别的意义。
+ * 3.ThraedFunc 线程池的实际工作函数：封装了epoll
+ *		客户端套接字收到输入请求：接收客户端给服务器的数据 + 调用m_recvcallback（绑定Received回调函数）处理收到的数据
+ * 
+ * 4.Received 回调函数：主要业务在此处理
+ *		http解析
+ *		应答函数
+ *		将处理完的数据发送给外面的客户端
 */
 
 /*网络服务器处理子进程*/
@@ -254,7 +280,11 @@ private:
 						if (pClient) {
 							Buffer data;
 							ret = pClient -> Recv(data);
-							WARN_CONTINUE(ret);
+							if (ret <= 0) {
+								TRACEW("ret = %d errno = %d msg = [%s]", ret, errno, strerror(errno));
+								m_epoll.Del(*pClient);
+								continue;
+							}
 							if (m_recvcallback) {
 								(*m_recvcallback)(pClient,data);
 							}
